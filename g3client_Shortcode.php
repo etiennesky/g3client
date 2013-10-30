@@ -37,6 +37,7 @@ function G3Client_Shortcode_Handler($atts) {
 	$lightboxDefault = get_option(G3_SETTINGS_USELIGHTBOX, 'on');
 	$albumHeading = get_option(G3_SETTINGS_SHOWALBUMHEADING, 'on');
 	$photoHeading = get_option(G3_SETTINGS_SHOWPHOTOHEADING, 'on');
+	$showChildren = get_option(G3_SETTINGS_SHOWCHILDREN, 'on');
 
 	extract(shortcode_atts(array(
 		'item' => -1,
@@ -48,6 +49,7 @@ function G3Client_Shortcode_Handler($atts) {
 		'lightbox' => $lightboxDefault,
 		'albumheading' => $albumHeading,
 		'photoheading' => $photoHeading,
+		'children' => $showChildren
 	), $atts));
 
 	if(isset($_GET['item']) && is_numeric($_GET['item']))
@@ -61,18 +63,19 @@ function G3Client_Shortcode_Handler($atts) {
 	$lightbox = G3Client_ParseBoolean($lightbox);
 	$albumHeading = G3Client_ParseBoolean($albumHeading);
 	$photoHeading = G3Client_ParseBoolean($photoHeading);
+    $showChildren = G3Client_ParseBoolean($children);
 
 	switch(strtolower($output)) {
 		case 'html':
 			$outputFormatter = new G3Client_HTMLOutput(
 				$itemsperrow, $sluginsingleview, $breadcrumb, $thumbtitles, $albumHeading,
-					$photoHeading, $lightbox);
+					$photoHeading, $lightbox, $showChildren);
 			break;
 
 		default:
 			$outputFormatter = new G3Client_HTMLOutput(
 				$itemsperrow, $sluginsingleview, $breadcrumb, $thumbtitles, $albumHeading,
-					$photoHeading, $lightbox);
+					$photoHeading, $lightbox, $showChildren);
 
 	}
 
@@ -86,7 +89,8 @@ function G3Client_Shortcode_Handler($atts) {
             G3_SETTINGS_SHOWTHUMBTITLES => $thumbtitles,
             G3_SETTINGS_USELIGHTBOX => $lightbox,
             G3_SETTINGS_SHOWALBUMHEADING => $albumHeading,
-            G3_SETTINGS_SHOWPHOTOHEADING => $photoHeading
+            G3_SETTINGS_SHOWPHOTOHEADING => $photoHeading,
+            G3_SETTINGS_SHOWCHILDREN => $showChildren
         ));
 
         return $outputFormatter->generateView($item);

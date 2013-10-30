@@ -44,6 +44,7 @@ define('G3_SETTINGS_USELIGHTBOX', 'g3_uselightbox');
 define('G3_SETTINGS_SHOWALBUMHEADING', 'g3_showalbumheading');
 define('G3_SETTINGS_SHOWPHOTOHEADING', 'g3_showphotoheading');
 define('G3_SETTINGS_LIGHTBOXCOMPATMODE', 'g3_lightboxcompatmode');
+define('G3_SETTINGS_SHOWCHILDREN', 'g3_showchildren');
 define('G3_SETTINGS_USERCSSFILE', 'g3_usercssfile');
 define('G3_SETTINGS_ALBUMSHEADING', 'g3_albumsheading');
 define('G3_SETTINGS_PHOTOSHEADING', 'g3_photosheading');
@@ -111,6 +112,7 @@ function G3Client_RegisterSettings() {
 	register_setting('g3client-settings', G3_SETTINGS_LIGHTBOXCOMPATMODE);
 	register_setting('g3client-settings', G3_SETTINGS_SHOWALBUMHEADING);
 	register_setting('g3client-settings', G3_SETTINGS_SHOWPHOTOHEADING);
+	register_setting('g3client-settings', G3_SETTINGS_SHOWCHILDREN);
 	register_setting('g3client-settings', G3_SETTINGS_USERCSSFILE);
     register_setting('g3client-settings', G3_SETTINGS_ALBUMSHEADING);
     register_setting('g3client-settings', G3_SETTINGS_PHOTOSHEADING);

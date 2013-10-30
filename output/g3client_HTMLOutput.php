@@ -32,7 +32,7 @@ class G3Client_HTMLOutput extends G3Client_Output {
     }
 
 	public function generateView($toShow) {
-		$toShow = $this->client->getItem($toShow);
+		$toShow = $this->client->getItem($toShow,'',$this->getOption(G3_SETTINGS_SHOWCHILDREN));
 
 		if(is_array($toShow) && isset($toShow['failure']))
 			return $this->getErrorMessage($toShow);
@@ -96,6 +96,8 @@ class G3Client_HTMLOutput extends G3Client_Output {
 	}
 
 	private function generateThumbView($items, $rel = '') {
+		if(count($items) == 0) 
+		  return '';
 		$result = '<table class="g3client_thumbview">';
 
 		$i = 0;

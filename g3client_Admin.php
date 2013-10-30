@@ -95,6 +95,12 @@ function G3Client_AdminPage() {
 		<span class="description">If you have problems with other lightbox plugins/scripts try to enable the <code>Lightbox Compatibility Mode</code> in the Miscellaneous section below.</span>
 		</td>
 	</tr>
+	<tr valign="top">
+		<th scope="row"><?php _e('Show children of album', 'g3client') ?></th>
+		<td>
+			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWCHILDREN ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWCHILDREN, 'on')) ?>/> <?php _e('Show each child image instead of root album image.', 'g3client') ?></label>
+		</td>
+	</tr>
 </table>
 
 <h3><?php _e('Output', 'g3client') ?></h3>
@@ -219,6 +225,11 @@ function G3Client_AdminPage() {
     	<tr>
     		<td><code>lightbox</code></td>
     		<td><?php _e('show photos with a lightbox', 'g3client') ?></td>
+    		<td><code>yes</code> <?php _e('or', 'g3client') ?> <code>no</code></td>
+    	</tr>
+    	<tr>
+    		<td><code>children</code></td>
+    		<td><?php _e('show children of album', 'g3client') ?></td>
     		<td><code>yes</code> <?php _e('or', 'g3client') ?> <code>no</code></td>
     	</tr>
     </tbody>

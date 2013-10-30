@@ -141,12 +141,15 @@ class G3Client {
 		return $result;
 	}
 
-	public function getItem($parentId = -1, $type = '') {
+	public function getItem($parentId = -1, $type = '', $showChildren = true) {
 		$data = $this->request('item/' . (($parentId == -1) ? '1' : $parentId) . (!empty($type) ? '?type=' . $type : ''));
 
 		if(!is_object($data)) return $data;
 
-		$members = $this->extractMembers($data);
+        if($showChildren)
+			$members = $this->extractMembers($data);
+		else
+			$members = array($data);
 
 		$photos = array();
 		$albums = array();
