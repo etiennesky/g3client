@@ -56,9 +56,13 @@ class G3Client {
 		$this->baseURL = $url;
 	}
 
-	private function request($resource, $isURL = false) {
-		if(!$isURL) $resource = $this->baseURL . $resource;
-
+    private function request($resource, $isURL = false) {
+        if(is_array($resource)) {
+            $items = $resource;
+            $resource = $this->baseURL . "items?urls=[%22" . implode("%22,%22",$items) . "%22]";
+        }
+        else if(!$isURL) $resource = $this->baseURL . $resource;
+ 
 		if(isset($this->requestCache[$resource])) return $this->requestCache[$resource];
 
 		return ($this->useHTTPReq2) ? $this->requestHTTP2($resource) : $this->requestCURL($resource);
@@ -188,6 +192,7 @@ class G3Client {
 
 		$result = array();
 
+        /*
 		foreach($data->members as $member) {
 			$memberData = $this->request($member, true);
 
@@ -195,8 +200,15 @@ class G3Client {
 				$result[] = $memberData;
 			}
 		}
+        */
 
-		return $result;
+        $items = array();
+        foreach($data->members as $member) {
+            $items[] = $member;
+        }
+        $result = $this->request($items);
+
+        return $result;
 	}
 
 	private function toAlbum($item) {
@@ -260,6 +272,7 @@ class G3Client {
 		$result = array();
 
 		$curItem = $item->entity;
+        // TODO also make a single request as in extractMembers
 		while(!empty($curItem) && isset($curItem->parent)) {
 			$curParent = $this->request($curItem->parent, true);
 
