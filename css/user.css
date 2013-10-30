@@ -1,0 +1,75 @@
+/**
+ G3 CLIENT USER CSS TEMPLATE
+ check the source code of the html page to identify more css classes/ids
+*/
+
+/** wraps the complete g3client output */
+.g3client_wrapper {
+}
+
+/** thumbnail title */
+.g3client_thumb_title {
+}
+
+/** thumbnail link */
+.g3client_thumb {
+
+}
+
+/** captions for albums and photos view */
+.g3client_albumscaption,
+.g3client_photoscaption {
+}
+
+/** g3client images */
+.g3client_thumb_album img,
+.g3client_thumb_photo img {
+}
+
+/** breadcrumb container */
+.g3client_breadcrumb {
+}
+
+/** breadcrumb current item */
+.g3client_curitem {
+}
+
+/** thumbnail view table */
+.g3client_thumbview {
+}
+
+/** thumbnail view table cell */
+.g3client_thumbview td {
+}
+
+/** single photo view */
+.g3client_singleview {
+}
+
+/** photo in the single photo view */
+.g3client_singleview img {
+}
+
+/** title in the single photo view */
+.g3client_singletitle {
+}
+
+/** slug in the photo view */
+.g3client_singleslug {
+}
+
+/** widget error message */
+.g3client-widget-error {
+}
+
+/** image in the widget */
+.g3client_widget_random_photo_link img {
+}
+
+/** href element in the widget */
+.g3client_widget_random_photo_link {
+}
+
+/** widget container */
+.g3client_widget_randomphoto_container {
+}

@@ -1,0 +1,242 @@
+# Copyright (C) 2010 G3Client
+# This file is distributed under the same license as the G3Client package.
+msgid ""
+msgstr ""
+"Project-Id-Version: G3Client 0.1.5\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/g3client\n"
+"POT-Creation-Date: 2011-02-19 00:57:36+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: output/g3client_HTMLOutput.php:63
+msgid "There are other albums to see here..."
+msgstr ""
+
+#: output/g3client_HTMLOutput.php:71
+msgid "Photos in this album"
+msgstr ""
+
+#: output/g3client_HTMLOutput.php:91
+msgid "Could not retrieve Gallery3 data"
+msgstr ""
+
+#: output/g3client_HTMLOutput.php:105
+msgid "You are here"
+msgstr ""
+
+#: g3client_Admin.php:29 g3client.php:56
+msgid "G3Client Settings"
+msgstr ""
+
+#: g3client_Admin.php:33
+msgid "Gallery3 API Settings"
+msgstr ""
+
+#: g3client_Admin.php:36
+msgid "Rest API URL"
+msgstr ""
+
+#: g3client_Admin.php:39
+msgid ""
+"The base url of the rest api, for example: <code>http://www.example.com/"
+"gallery3/index.php/rest/</code>"
+msgstr ""
+
+#: g3client_Admin.php:43
+msgid "API Key"
+msgstr ""
+
+#: g3client_Admin.php:46
+msgid "The rest api key, is available in the user's profile."
+msgstr ""
+
+#: g3client_Admin.php:52
+msgid ""
+"These are the default settings. They can be overwritten by the shortcode "
+"attributes (see below)"
+msgstr ""
+
+#: g3client_Admin.php:55
+msgid "Items per row"
+msgstr ""
+
+#: g3client_Admin.php:58
+msgid "Specifies the maximal number of photos or albums displayed in a row."
+msgstr ""
+
+#: g3client_Admin.php:62
+msgid "Show slug for single photos"
+msgstr ""
+
+#: g3client_Admin.php:64
+msgid ""
+"Display the photo slug in single photo view (does not apply if light box is "
+"enabled)."
+msgstr ""
+
+#: g3client_Admin.php:68
+msgid "Show breadcrumb"
+msgstr ""
+
+#: g3client_Admin.php:70
+msgid "Show breadcrumb navigation on top of photo(s) or album(s)."
+msgstr ""
+
+#: g3client_Admin.php:74
+msgid "Thumbnail titles"
+msgstr ""
+
+#: g3client_Admin.php:76
+msgid "Show titles for thumbnails."
+msgstr ""
+
+#: g3client_Admin.php:80
+msgid "Show albums heading"
+msgstr ""
+
+#: g3client_Admin.php:82 g3client_Admin.php:88
+msgid "Show an head line above the album listings."
+msgstr ""
+
+#: g3client_Admin.php:86
+msgid "Show photos heading"
+msgstr ""
+
+#: g3client_Admin.php:92
+msgid "Use lightbox"
+msgstr ""
+
+#: g3client_Admin.php:94
+msgid "Use a lightbox script to display full images."
+msgstr ""
+
+#: g3client_Admin.php:100
+msgid "Miscellaneous"
+msgstr ""
+
+#: g3client_Admin.php:103
+msgid "Lightbox compatibility mode"
+msgstr ""
+
+#: g3client_Admin.php:105
+msgid ""
+"Can prevent problems when using other lightbox plugins/scripts together with "
+"G3Client's integrated one."
+msgstr ""
+
+#: g3client_Admin.php:108
+msgid "User css file"
+msgstr ""
+
+#: g3client_Admin.php:111
+msgid ""
+"The path to a user defined css file to be included. The path has to be given "
+"relative to the current theme's style sheet directory."
+msgstr ""
+
+#: g3client_Admin.php:116
+msgid "How to use G3Client"
+msgstr ""
+
+#: g3client_Admin.php:118
+msgid "Open the page/post where you want the gallery to show up"
+msgstr ""
+
+#: g3client_Admin.php:119
+msgid "Add the following shortcode to the page/post contents:"
+msgstr ""
+
+#: g3client_Admin.php:122
+msgid "Shortcode options"
+msgstr ""
+
+#: g3client_Admin.php:125
+msgid "Option"
+msgstr ""
+
+#: g3client_Admin.php:126
+msgid "Description"
+msgstr ""
+
+#: g3client_Admin.php:127
+msgid "Value(s)"
+msgstr ""
+
+#: g3client_Admin.php:131
+msgid "specifies the item to show"
+msgstr ""
+
+#: g3client_Admin.php:132
+msgid "a numeric Gallery3 id"
+msgstr ""
+
+#: g3client_Admin.php:136
+msgid "specifies the max number of items per row"
+msgstr ""
+
+#: g3client_Admin.php:137
+msgid "a number"
+msgstr ""
+
+#: g3client_Admin.php:141
+msgid "to show the slug in a single photo view"
+msgstr ""
+
+#: g3client_Admin.php:142 g3client_Admin.php:147 g3client_Admin.php:152
+#: g3client_Admin.php:157 g3client_Admin.php:162 g3client_Admin.php:167
+msgid "or"
+msgstr ""
+
+#: g3client_Admin.php:146
+msgid "show the breadcrumb navigation"
+msgstr ""
+
+#: g3client_Admin.php:151
+msgid "show the thumbnail titles"
+msgstr ""
+
+#: g3client_Admin.php:156
+msgid "show a head line above the albums listing"
+msgstr ""
+
+#: g3client_Admin.php:161
+msgid "show a head line above the photos listing"
+msgstr ""
+
+#: g3client_Admin.php:166
+msgid "show photos with a lightbox"
+msgstr ""
+
+#: g3client_Admin.php:172
+msgid "Save Changes"
+msgstr ""
+
+#: g3client_Admin.php:190
+msgid "Could not connect to Gallery3"
+msgstr ""
+
+#: g3client_Admin.php:195
+msgid "http status code"
+msgstr ""
+
+#: g3client_Shortcode.php:80
+msgid "Internal error: could not select G3Client output formatter"
+msgstr ""
+
+#. #-#-#-#-#  g3client.pot (G3Client 0.1.5)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: g3client.php:57
+msgid "G3Client"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "A simple client for the excellent Gallery3"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Florian Stoffel <fstoffel@users.sourceforge.net>"
+msgstr ""
