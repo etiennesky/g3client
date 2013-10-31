@@ -610,7 +610,6 @@
 		},
 
 		// Swap normal image will full size
-        // TODO make transition smoother (this calls _start() which is not ideal) and test
 		toggle2: function ( action ) {
 			if (F.isOpen) {
 
@@ -619,8 +618,10 @@
                 if (current && current.type == 'image' && current.fullimg != undefined && current.group[ index ] !== undefined) {
                     var coming = F.group[ index ];
                     coming.isFullImg = !F.current.isFullImg;
+                    F.isOpened = false; // hack to force openMethod instead of nextMethod in _afterLoad()
+
                     // TODO allow to scale image to view, this scales it to 100% off full image which is not ok
-				    //coming.fitToView = $.type(action) === "boolean" ? action : !F.current.fitToView;
+                    //coming.fitToView = $.type(action) === "boolean" ? action : !F.current.fitToView;
 
 			        if (!current.isFullImg) {
                         coming.href = F.current.fullimg;
