@@ -1181,6 +1181,13 @@
 			// Set scrolling before calculating dimensions
 			current.inner.css('overflow', scrolling === 'yes' ? 'scroll' : (scrolling === 'no' ? 'hidden' : scrolling));
 
+            // backup initial margins - this should be in an array
+            // but how to copy by value and not reference?
+            current.initMargin0 = current.margin[0];
+            current.initMargin1 = current.margin[1];
+            current.initMargin2 = current.margin[2];
+            current.initMargin3 = current.margin[3];
+
 			// Set initial dimensions and start position
 			F._setDimension();
 
@@ -1204,6 +1211,10 @@
 		},
 
 		_setDimension: function () {
+
+            // restore margins and padding to init values
+            F.current.margin =  [ F.current.initMargin0, F.current.initMargin1, F.current.initMargin2, F.current.initMargin3 ];
+
 			var viewport   = F.getViewport(),
 				steps      = 0,
 				canShrink  = false,
@@ -1315,7 +1326,15 @@
 				maxWidth  = Math.min(viewport.w - wSpace, maxWidth);
 				maxHeight = Math.min(viewport.h - hSpace, maxHeight);
 			}
-
+            else {
+                //make sure fits within document window (fix when image is large and current.fitToView == false)
+                // TODO get margins of important helpers and controls (close button, title)
+                // for now this is hard-coded
+                if ( maxWidth >= window.innerWidth )
+                    maxWidth = window.innerWidth - wPadding;
+                if ( maxHeight >= window.innerHeight )
+                    maxHeight = window.innerHeight - 18 - 35 - hPadding;
+            }
 			maxWidth_  = viewport.w - wMargin;
 			maxHeight_ = viewport.h - hMargin;
 
@@ -1395,6 +1414,21 @@
 				}
 			}
 
+            // adjust margins if image doesn't fit inside the window
+            // TODO also remoe padding
+            else {
+            if ( width + wMargin + wPadding > window.innerWidth ) {
+                var diff = width + wMargin + wPadding - window.innerWidth;
+                current.margin[1] = Math.max(0, current.margin[1] - diff/2);
+                current.margin[3] = Math.max(0, current.margin[3] - diff/2);
+            }
+
+            if ( height + hMargin + hPadding > window.innerHeight ) {
+                var diff = height + hMargin + hPadding - window.innerHeight;
+                current.margin[0] = Math.max(15, current.margin[0] - diff/2);
+                current.margin[2] = Math.max(0, current.margin[2] - diff/2);
+            }
+            }
 			if (scrollOut && scrolling === 'auto' && height < origHeight && (width + wPadding + scrollOut) < maxWidth_) {
 				width += scrollOut;
 			}
