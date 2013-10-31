@@ -4,8 +4,7 @@ jQuery(document).ready(function($) {
 		'hideOnContentClick': true,
 		'transitionIn': 'elastic',
 		'transitionOut': 'fade',
-
-	    //padding: 0,
+	    padding: 5,
 //	    margin: [ 200, 60, 200, 60 ],
 	    //closeBtn: false,
 
