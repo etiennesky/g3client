@@ -620,8 +620,7 @@
                     coming.isFullImg = !F.current.isFullImg;
                     F.isOpened = false; // hack to force openMethod instead of nextMethod in _afterLoad()
 
-                    // TODO allow to scale image to view, this scales it to 100% off full image which is not ok
-                    //coming.fitToView = $.type(action) === "boolean" ? action : !F.current.fitToView;
+                    coming.fitToView = $.type(action) === "boolean" ? action : !F.current.fitToView;
 
 			        if (!current.isFullImg) {
                         coming.href = F.current.fullimg;
