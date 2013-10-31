@@ -71,6 +71,7 @@
 			autoResize  : true,
 			autoCenter  : !isTouch,
 			fitToView   : true,
+			isFullImg   : false,
 			aspectRatio : false,
 			topRatio    : 0.5,
 			leftRatio   : 0.5,
@@ -258,7 +259,7 @@
 						element = $(element);
 					}
 
-					if (isQuery(element)) {
+                    if (isQuery(element)) {
 						obj = {
 							href    : element.data('fancybox-href') || element.attr('href'),
 							title   : element.data('fancybox-title') || element.attr('title'),
@@ -269,7 +270,12 @@
 						if ($.metadata) {
 							$.extend(true, obj, element.metadata());
 						}
-
+                        if (element.data('fullimg-href') != undefined && element.data('fullimg-href') != '') {
+                            $.extend(obj, {
+							    fullimg : element.data('fullimg-href'),
+							    baseimg : obj.href
+				            });
+                        }
 					} else {
 						obj = element;
 					}
@@ -295,7 +301,6 @@
 					if (!type) {
 						if (F.isImage(href)) {
 							type = 'image';
-
 						} else if (F.isSWF(href)) {
 							type = 'swf';
 
@@ -586,6 +591,11 @@
 		// Shrink content to fit inside viewport or restore if resized
 		toggle: function ( action ) {
 			if (F.isOpen) {
+
+                if (F.current && F.current.type == 'image' && F.current.fullimg != undefined ) {
+                    return F.toggle2(action);
+                }
+
 				F.current.fitToView = $.type(action) === "boolean" ? action : !F.current.fitToView;
 
 				// Help browser to restore document dimensions
@@ -596,6 +606,33 @@
 				}
 
 				F.update();
+			}
+		},
+
+		// Swap normal image will full size
+        // TODO make transition smoother (this calls _start() which is not ideal) and test
+		toggle2: function ( action ) {
+			if (F.isOpen) {
+
+			    var current = F.current;
+                var index = getScalar(current.index);
+                if (current && current.type == 'image' && current.fullimg != undefined && current.group[ index ] !== undefined) {
+                    var coming = F.group[ index ];
+                    coming.isFullImg = !F.current.isFullImg;
+                    // TODO allow to scale image to view, this scales it to 100% off full image which is not ok
+				    //coming.fitToView = $.type(action) === "boolean" ? action : !F.current.fitToView;
+
+			        if (!current.isFullImg) {
+                        coming.href = F.current.fullimg;
+                    }
+                    else {
+                        coming.href = F.current.baseimg;
+                    }
+   
+				    F.cancel();
+				    F._start(index);
+			    
+                }               
 			}
 		},
 

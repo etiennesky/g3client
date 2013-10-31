@@ -241,6 +241,11 @@ class G3Client {
 			$result['imgurl'] = $item->entity->resize_url_public;
 			$result['img_height'] = $item->entity->resize_height;
 			$result['img_width'] = $item->entity->resize_width;
+            /* show full size if available */
+            /* TODO add option for this or change lightbox script to load resize unless requested */
+			$result['full_imgurl'] = $item->entity->file_url_public;
+			$result['full_img_height'] = $item->entity->height;
+			$result['full_img_width'] = $item->entity->width;
 
 			$result['thumb_height'] = $item->entity->thumb_height;
 			$result['thumb_width'] = $item->entity->thumb_width;

@@ -144,6 +144,10 @@ class G3Client_HTMLOutput extends G3Client_Output {
 			$result .= '<a href="' . $curItem['imgurl'] . '" title="' . $curItem['title'] . '"';
 			$result .= ' class="' . $this->getHrefCSS(array('g3client_image')) . '"';
 			if(!empty($rel)) $result .= ' rel="' . $rel . '"';
+            if( $curItem['imgurl'] != $curItem['full_imgurl'] && 
+                $curItem['img_height'] != $curItem['full_img_height'] &&
+                $curItem['img_width'] != $curItem['full_img_width'] )
+                $result .= ' data-fullimg-href="' .$curItem['full_imgurl']. '"';
 			$result .= '>';
 		} else {
 			$result .= '<a href="' . G3Client_OutputUtil::genURL(array('item' => $curItem['id']))  . '" title="' . $slug . '">';
