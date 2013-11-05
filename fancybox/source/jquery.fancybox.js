@@ -55,7 +55,7 @@
 		defaults: {
 			padding : 15,
 			margin  : 20,
-            maxMargin : [ 5, 5, 5, 5 ],
+            fullscreenMargin : [ 0, 0, 0, 0 ],
 
 			width     : 800,
 			height    : 600,
@@ -816,7 +816,7 @@
 				href,
 				type,
 				margin,
-			    maxMargin,
+			    fullscreenMargin,
 				padding;
 
 			index = getScalar( index );
@@ -830,7 +830,7 @@
 
 			// Convert margin and padding properties to array - top, right, bottom, left
 			margin  = coming.margin;
-			maxMargin  = coming.maxMargin;
+			fullscreenMargin  = coming.fullscreenMargin;
 			padding = coming.padding;
 
 			if ($.type(margin) === 'number') {
@@ -1333,9 +1333,9 @@
                 // TODO get margins of important helpers and controls (close button, title)
                 // for now this is hard-coded
                 if ( maxWidth >= window.innerWidth )
-                    maxWidth = window.innerWidth - current.maxMargin[1] - current.maxMargin[3] - wPadding;
+                    maxWidth = window.innerWidth - current.fullscreenMargin[1] - current.fullscreenMargin[3] - wPadding;
                 if ( maxHeight >= window.innerHeight )
-                    maxHeight = window.innerHeight - current.maxMargin[0] - current.maxMargin[2] - hPadding;
+                    maxHeight = window.innerHeight - current.fullscreenMargin[0] - current.fullscreenMargin[2] - hPadding;
             }
 			maxWidth_  = viewport.w - wMargin;
 			maxHeight_ = viewport.h - hMargin;
@@ -1422,12 +1422,12 @@
             if ( width + wMargin + wPadding > window.innerWidth ) {
                 var diff = width + wMargin + wPadding - window.innerWidth;
                 current.margin[1] = Math.max(0, current.margin[1] - diff/2);
-                current.margin[3] = Math.max(current.maxMargin[3], current.margin[3] - diff/2);
+                current.margin[3] = Math.max(current.fullscreenMargin[3], current.margin[3] - diff/2);
             }
 
             if ( height + hMargin + hPadding > window.innerHeight ) {
                 var diff = height + hMargin + hPadding - window.innerHeight;
-                current.margin[0] = Math.max(current.maxMargin[0], current.margin[0] - diff/2);
+                current.margin[0] = Math.max(current.fullscreenMargin[0], current.margin[0] - diff/2);
                 current.margin[2] = Math.max(0, current.margin[2] - diff/2);
             }
             }

@@ -6,7 +6,7 @@ jQuery(document).ready(function($) {
 		'transitionOut': 'fade',
 	    padding: 5,
 //	    margin: [ 200, 60, 200, 60 ],
-        maxMargin : [ 50, 0, 150, 0 ],
+        fullscreenMargin : [ 50, 0, 150, 0 ],
 	    //closeBtn: false,
 
 	    helpers: {
