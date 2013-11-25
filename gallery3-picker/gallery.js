@@ -40,6 +40,7 @@ function selectFolder(id)
 
 function updateImageMeta(data)
 {
+    //alert(JSON.stringify(data), null, 4);
 	jQuery('#pickerThumbContainer').append('<img src="' + data.thumbnail.url + '" style="width: ' + 
 		data.thumbnail.width + 'px; height: ' + data.thumbnail.height + 'px;" />');
 	jQuery('#pickerTitle').text(data.title);
@@ -80,6 +81,7 @@ function updateImageMeta(data)
 	else
 	{
 		jQuery('tr.pickerCanEmbed').fadeIn(200);
+		jQuery('span.pickerCanEmbed').fadeIn(200);
 		jQuery('#pickerStatus').html("This image is accessible from the Internet.");	
 	}
 }
@@ -114,16 +116,23 @@ function generateImageHtml()
 	var align = jQuery('input:radio[name=align]:checked').val();
 		
 	if (caption != '') { html += '[caption align="' + align + '" width="' + attr_safe(img[0]) + '" caption="' + caption + '"]'; }
-	if (link != '') { html += '<a href="' + link + '">'; }
+	if (link != '') 
+    { 
+        html += '<a href="' + link + '" '; 
+	    html += 'class="g3client_image" ';
+	    html += 'rel="group-g3picker" ';
+        html += '>'; 
+    }
 	html += '<img src="' + attr_safe(img[2]) + '" ';
 	html += 'class="';
 	if (caption == '') { jQuery('input:radio[name=align]:checked').val(); }
 	html += '" ';
 	html += 'width="' + attr_safe(img[0]) + '" height="' + attr_safe(img[1]) + '" ';
 	html += '>';
-	
 	if (link != '') { html += '</a>'; }
 	if (caption != '') { html += '[/caption]'; }
+
+	//alert(html);
 	
 	parent.send_to_editor(html);	
 }

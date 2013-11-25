@@ -105,6 +105,9 @@ class gallery3Proxy {
 		$return['filename'] = $ent->{'name'};
 		$return['sizeList'] = $sizes;
 		$return['url'] = $ent->{'web_url'};
+        // TODO only if g3client lightbox is enabled???
+        if (isset($ent->{'resize_url_public'}))
+            $return['url'] = $ent->{'resize_url_public'};
 		
 		$size = $ent->{'file_size'};
 		if ($size == '') { $size = $ent->{'resize_size'}; }

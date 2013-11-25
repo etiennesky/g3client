@@ -32,6 +32,7 @@ License: MIT
 include_once(dirname(__FILE__) . '/g3client_Admin.php');
 include_once(dirname(__FILE__) . '/g3client_Shortcode.php');
 include_once(dirname(__FILE__) . '/widgets/g3client_RandomPhotoWidget.php');
+include_once(dirname(__FILE__) . '/gallery3-picker/picker.php');
 
 define('G3_SETTINGS_APIURL', 'g3_restapiurl');
 define('G3_SETTINGS_APIKEY', 'g3_restapikey');
@@ -62,7 +63,9 @@ if(is_admin()){
     if(!get_option(G3_SETTINGS_APIKEY) || !get_option(G3_SETTINGS_APIURL)) {
         add_action('admin_notices', 'G3Client_AdminSettingsWarning');
     }
+    add_filter('tiny_mce_before_init','G3client_editor_mce_valid_elements', 0);
 }
+
 
 /** settings incomplete warning */
 function G3Client_AdminSettingsWarning(){
@@ -152,6 +155,16 @@ function G3Client_Init() {
 function G3Client_RegisterWidgets(){
     // register random photo widget
     register_widget('G3Client_RandomPhotoWidget');
+}
+
+function G3client_editor_mce_valid_elements($init)
+{
+    if ( isset( $init['extended_valid_elements'] ) 
+         && ! empty( $init['extended_valid_elements'] ) )
+        $init['extended_valid_elements'] .= ",a[*],img[*]";
+    else
+        $init['extended_valid_elements'] = "a[*],img[*]";
+    return $init;
 }
 
 ?>
