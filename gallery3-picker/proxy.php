@@ -210,7 +210,7 @@ class gallery3Proxy {
 		return gallery3Proxy::treeBuilder($root, $g3p_cache);
 	}
 	
-	function treeBuilder($itemUrl, &$g3p_cache)
+	function treeBuilder($itemUrl, $g3p_cache)
 	{
 		$item = $g3p_cache[$itemUrl];
 		$morsel = array(
@@ -240,7 +240,7 @@ class gallery3Proxy {
 				
 				if (array_key_exists($value, $g3p_cache))
 				{
-					$children = gallery3Proxy::treeBuilder($value, &$g3p_cache);
+					$children = gallery3Proxy::treeBuilder($value, $g3p_cache);
 					if (count($children) > 0) {
 						$morsel['children'][] = $children;
 					}

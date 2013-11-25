@@ -35,7 +35,7 @@ class gallery3Picker {
 	function tab_select_gallery()
 	{
 		$options = get_option('gallery3_picker_options');
-		$plugin_url = get_settings('home').'/wp-content/plugins/'.dirname(plugin_basename(__FILE__));
+		$plugin_url = get_settings('siteurl').'/wp-content/plugins/'.dirname(plugin_basename(__FILE__));
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery.jstree.strip.min', $plugin_url . '/jquery.jstree.min.js');
