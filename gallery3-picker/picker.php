@@ -111,6 +111,11 @@ echo <<<EOT
 									<p>
 										<span id="pickerSize"></span>
 									</p>
+                                    <p>&nbsp;</p>
+					                <p><span class='savesend pickerCanEmbed'>
+						                <input type='button' class='button' name='send' onclick="generateImageHtml();" value='Insert into Post' /> 
+						                <a href='#' class='del-link' onclick="parent.eval('tb_remove()'); return false;">Cancel</a>
+					                </span></p>
 									<input type="button" onclick="importImage($node_id);" class="button" value="Import into WordPress" />
 								</td>
 							</tr>
@@ -169,6 +174,7 @@ echo <<<EOT
 						
 					</td>
 				</tr>
+<!--
 				<tr class='submit pickerCanEmbed' style="display: none;">
 					<td></td>
 					<td class='savesend'>
@@ -176,6 +182,7 @@ echo <<<EOT
 						<a href='#' class='del-link' onclick="parent.eval('tb_remove()'); return false;">Cancel</a>
 					</td>
 				</tr>
+-->
 				</tbody>
 			</table>
 		</div>
