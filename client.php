@@ -56,16 +56,29 @@ class G3Client {
 		$this->baseURL = $url;
 	}
 
-    private function request($resource, $isURL = false) {
+
+	private function request($resource, $isURL = false) {
+
         if(is_array($resource)) {
             $items = $resource;
-            $resource = $this->baseURL . "items?urls=[%22" . implode("%22,%22",$items) . "%22]";
+            $req = $this->baseURL . "items?urls=[%22" . implode("%22,%22",$items) . "%22]";
         }
-        else if(!$isURL) $resource = $this->baseURL . $resource;
- 
-		if(isset($this->requestCache[$resource])) return $this->requestCache[$resource];
+	else if(!$isURL) 
+	     $req = $this->baseURL . $resource;
+	else 
+	     $req = $resource;
 
-		return ($this->useHTTPReq2) ? $this->requestHTTP2($resource) : $this->requestCURL($resource);
+	if ( strlen($req) > 8000 ) {
+	$ret = $this->request(array_slice($resource,0,intval(count($resource)/2)));
+	$ret = array_merge( $ret, $this->request(array_slice($resource,intval(count($resource)/2))) );
+	return $ret;
+        }
+ 
+		if(isset($this->requestCache[$req])) return $this->requestCache[$req];
+
+		$res = ($this->useHTTPReq2) ? $this->requestHTTP2($req) : $this->requestCURL($req);
+
+		return $res;
 	}
 
 	private function requestCURL($resource) {
