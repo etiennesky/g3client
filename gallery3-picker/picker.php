@@ -46,8 +46,12 @@ class gallery3Picker {
 		{
 			return wp_iframe( array('gallery3Picker', 'media_upload_type_gallery3_config_error'));
 		}
-		else if ($_GET['gallery3_picker_id'] && $_GET['deleted'] != 1)
+		else if ($_GET['gallery3_picker_id'] && $_GET['deleted'] != 1 )
 		{
+            if ( $_GET['gallery3_picker_type'] && $_GET['gallery3_picker_type']=='album' ) {
+				return wp_iframe( array('gallery3Picker', 'media_upload_type_gallery3_insert_form'), 'gallery3', $errors, $id );                
+            }
+            else {
 			if ($_GET['gallery3_import'] == 'true')
 			{
 				return wp_iframe( array('gallery3Picker', 'media_upload_type_gallery3_native_insert_form'), 'gallery3', $errors, $id );
@@ -56,6 +60,7 @@ class gallery3Picker {
 			{
 				return wp_iframe( array('gallery3Picker', 'media_upload_type_gallery3_insert_form'), 'gallery3', $errors, $id );				
 			}
+            }
 		}
 		else
 		{
@@ -145,6 +150,7 @@ echo <<<EOT
 					</th>
 					<td class='field'>
 						<input type='text' class='text urlfield' name="pickerUrl" id="pickerUrl" value="" /><br />
+						<input type='hidden' name="fullUrl" id="fullUrl" value="" /><br />
 						<button type='button' id="urlButtonEmpty" class='button urlnone' onclick="buttonToField(this,'pickerUrl');" title="">None</button>
 						<button type='button' id="urlButtonGallery" class='button urlfile' onclick="buttonToField(this,'pickerUrl');" title="">Gallery page</button>
 						<button type='button' id="urlButtonPost" class='button urlpost' onclick="buttonToField(this,'pickerUrl');" title="$permaLink">Post URL</button>
@@ -262,6 +268,9 @@ EOT;
 				<ul>
 					<li id="g3pt_0"><span id="gallery3_picker_tree_base">Loading...</span></li>
 				</ul>
+		</div>
+        <div>
+          <input type="button" value="Add Album" onClick="javascript:fetchAlbum();" />
 		</div>
 		<div id="media-items">
 			<div class="media-item media-blank" id="gallery3_picker_preview" style="height: 500px;">

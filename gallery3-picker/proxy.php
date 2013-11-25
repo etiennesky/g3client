@@ -64,6 +64,7 @@ class gallery3Proxy {
 		}
 		$sizes[] = $size;
 		
+        if ( $ent->{'type'} != 'album' ) {
 		// Resize image public?
 		$size = array(
 			'height' => $ent->{'resize_height'},
@@ -87,12 +88,13 @@ class gallery3Proxy {
 			'value' => 'full',
 			'public' => false
 		);
-		if (isset($ent->{'resize_url_public'}))
+		if (isset($ent->{'file_url_public'}))
 		{
 			$size['public'] = true;
 			$size['url'] = $ent->{'file_url_public'};
 		}
 		$sizes[] = $size;
+        }
 		
 		$return['thumbnail'] = array(
 			'url' => gallery3Proxy::getThumbByEntity($ent),
@@ -104,17 +106,29 @@ class gallery3Proxy {
 		$return['views'] = $ent->{'view_count'};
 		$return['filename'] = $ent->{'name'};
 		$return['sizeList'] = $sizes;
-		$return['url'] = $ent->{'web_url'};
+
+		if ( $ent->{'type'} == 'album' ) {
+            //$return['url'] = $ent->{'web_url'};
+            // TODO insert g3client stuff?
+            $return['url'] = '/photo?&item=' . $node;
+        }
+        else {
+        $return['url'] = $ent->{'web_url'};
         // TODO only if g3client lightbox is enabled???
         if (isset($ent->{'resize_url_public'}))
             $return['url'] = $ent->{'resize_url_public'};
-		
+        if (isset($ent->{'file_url_public'}))
+            $return['fullUrl'] = $ent->{'file_url_public'};
+		}
+
+        if ( $ent->{'type'} == 'album' ) { $return['size'] = 'Album with ' . count($item->{'members'}) . ' photos'; }       else {
 		$size = $ent->{'file_size'};
 		if ($size == '') { $size = $ent->{'resize_size'}; }
-		
-		if ($size < 1024) { $return['size'] = $size . ' Bytes'; }
+		if ($size == '') { $return['size'] = ''; }
+		else if ($size < 1024) { $return['size'] = $size . ' Bytes'; }
 		else if ($size < 1048576) { $return['size'] = round( $size / 1024, 2) . ' KB'; }
 		else { $sizeStr = round( $return['size'] / 1048576, 2) . ' MB'; }
+        }
 		
 		return $return;
 	}
@@ -298,7 +312,6 @@ class gallery3Proxy {
 		gallery3Proxy::apiCheck($req);
 		$response = curl_exec($req);
 		$status = curl_getinfo($req, CURLINFO_HTTP_CODE);
-		
 		curl_close($req);
 		if ($rawText == true) { return($response); }
 		

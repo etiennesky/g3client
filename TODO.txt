@@ -1,0 +1,4 @@
+- fix missing alt/title
+- integrate gallery3 stuff (show album inside post instead of link)
+- generate html dynamically instead of once (if e.g. album cover changes)
+

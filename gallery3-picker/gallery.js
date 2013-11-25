@@ -5,6 +5,7 @@ jQuery(document).ready(function(){
 	var g3p_max;
 	var g3p_thumbnails;
 	var g3p_data;
+	var g3p_node;
 	
 	jQuery('#gallery3_picker_tree').jstree({
 		'json_data' : {
@@ -32,7 +33,8 @@ jQuery(document).ready(function(){
 
 function selectFolder(id)
 {
-	jQuery('#preview').unbind('scroll');
+    g3p_node = id;
+    jQuery('#preview').unbind('scroll');
 	jQuery.getJSON(ajaxurl, {what: 'photos', node: id, action: 'gallery3proxy'}, function(data) {
 		updateImagePicker(data)
 	});
@@ -40,7 +42,7 @@ function selectFolder(id)
 
 function updateImageMeta(data)
 {
-    //alert(JSON.stringify(data), null, 4);
+    //alert(JSON.stringify(data));
 	jQuery('#pickerThumbContainer').append('<img src="' + data.thumbnail.url + '" style="width: ' + 
 		data.thumbnail.width + 'px; height: ' + data.thumbnail.height + 'px;" />');
 	jQuery('#pickerTitle').text(data.title);
@@ -68,6 +70,7 @@ function updateImageMeta(data)
 	}	
 	
 	jQuery('#pickerUrl').val(data.url);
+	jQuery('#fullUrl').val(data.fullUrl);
 	jQuery('#urlButtonGallery').attr('title', data.url);
 	jQuery('input[name=pickerTitle]').val(data.title);
 	jQuery('input[name=pickerImageAlt]').val(data.title);
@@ -111,6 +114,7 @@ function generateImageHtml()
 	var imageValue = jQuery('input:radio[name=image-size]:checked').val();
 	var img = imageValue.split('|', 3);
 	var link = attr_safe(jQuery('input[name=pickerUrl]').val());
+	var fullUrl = attr_safe(jQuery('input[name=fullUrl]').val());
 	
 	var caption = attr_safe(entities(jQuery('input[name=pickerCaption]').val()));
 	var align = jQuery('input:radio[name=align]:checked').val();
@@ -121,6 +125,8 @@ function generateImageHtml()
         html += '<a href="' + link + '" '; 
 	    html += 'class="g3client_image" ';
 	    html += 'rel="group-g3picker" ';
+        if ( fullUrl != '' )
+            html += 'data-fullimg-href="' + fullUrl + '"';
         html += '>'; 
     }
 	html += '<img src="' + attr_safe(img[2]) + '" ';
@@ -204,7 +210,13 @@ function evaluateVisibility()
 
 function fetchImage(data)
 {
-	window.location = userSettings.url + 'wp-admin/media-upload.php?tab=gallery3_picker&post_id=' + post_id + '&gallery3_picker_id=' + data.id + '&thumb=' + data.thumb;
+	window.location = userSettings.url + 'wp-admin/media-upload.php?tab=gallery3_picker&gallery3_picker_type=image&post_id=' + post_id + '&gallery3_picker_id=' + data.id + '&thumb=' + data.thumb;
+}
+
+function fetchAlbum()
+{
+//    alert("fetchAlbum "+g3p_node);
+    window.location = userSettings.url + 'wp-admin/media-upload.php?tab=gallery3_picker&gallery3_picker_type=album&post_id=' + post_id + '&gallery3_picker_id=' + g3p_node;
 }
 
 
