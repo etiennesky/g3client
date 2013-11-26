@@ -20,7 +20,8 @@ require_once( 'proxy.php' );
 add_filter('media_upload_tabs', array('gallery3Picker', 'tab_gallery'));
 add_filter('media_upload_gallery3_picker', array('gallery3Picker', 'tab_select_gallery'));
 add_filter('media_upload_type_gallery3_form', array('gallery3Picker', 'media_upload_type_gallery3_form'));
-add_action('admin_menu', array('gallery3Picker', 'add_gallery3_picker_menu'));
+//this is called called from g3client.php
+//add_action('admin_menu', array('gallery3Picker', 'add_gallery3_picker_menu'));
 
 /* Javascript support */
 add_action('wp_ajax_gallery3proxy', array('gallery3Proxy', 'requestHandler'));
@@ -29,7 +30,8 @@ add_action('wp_ajax_gallery3proxy', array('gallery3Proxy', 'requestHandler'));
 class gallery3Picker {	
 	function add_gallery3_picker_menu()
 	{
-		add_options_page( __( 'Gallery3 settings' ), __( 'Gallery3 media picker' ), 8, basename(__FILE__), array('gallery3Picker', 'gallery3_picker_options_page'));
+        //add_options_page( __( 'Gallery3 settings' ), __( 'Gallery3 media picker' ), 8, basename(__FILE__), array('gallery3Picker', 'gallery3_picker_options_page'));
+        add_options_page( __( 'Gallery3 settings' ), __( 'G3client media picker' ), 8, basename(__FILE__), array('gallery3Picker', 'gallery3_picker_options_page'));
 	}
 	
 	function tab_select_gallery()
@@ -602,7 +604,7 @@ EOT;
 					</p>
 				<?php endif ?>
 				
-				<input type="submit" name="submit" value="<?php _e('Update Options') ?> &raquo;" />
+                               <input type="submit" name="submit" value="<?php _e('Update Options') ?> &raquo;" />
 			</div>
 		</form>
 		</div>
@@ -610,6 +612,5 @@ EOT;
 		<?
 	}
 }
-
 
 ?>

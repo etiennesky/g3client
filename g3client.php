@@ -79,9 +79,10 @@ function G3Client_AdminSettingsWarning(){
 
 /** admin menu hooks */
 function G3Client_AdminMenuHook() {
-	add_submenu_page('options-general.php', __('G3Client Settings', 'g3client'),
-		__('G3Client', 'g3client'), 'manage_options', plugin_basename(__FILE__),
-		'G3Client_AdminPage');
+    add_submenu_page('options-general.php', __('G3Client Settings', 'g3client'),
+                     __('G3Client', 'g3client'), 'manage_options', plugin_basename(__FILE__),
+                     'G3Client_AdminPage');
+    gallery3Picker::add_gallery3_picker_menu();
 }
 
 /** adds plugin action links */
