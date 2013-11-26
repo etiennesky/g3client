@@ -104,7 +104,8 @@
 			if (obj.canShrink) {
 				toggle.addClass('btnToggleOn');
 
-			} else if (!obj.canExpand) {
+			} else if (!obj.canExpand && obj.fullimg == undefined) {
+                // ugly hack for fullimg, should test only for canExpand but this is simpler
 				toggle.addClass('btnDisabled');
 			}
 		},
