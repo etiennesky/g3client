@@ -5,8 +5,7 @@
 
 		init : function(ed, url) {
 			var t = this;
-            //alert("g3client init");
-
+			t.nodes = {};
 			t.url = url;
 			t.editor = ed;
 			t._createButtons();
@@ -28,13 +27,13 @@
 
 				//frame = gallery.edit( '[' + ed.dom.getAttrib( el, 'title' ) + ']' );
 
-                alert("g3client addCommand "+el+" / "+ ed.dom.getAttrib( el, 'title' )+" / "+frame);
+				//alert("g3client addCommand "+el+" / "+ ed.dom.getAttrib( el, 'title' )+" / "+frame);
 
 				frame.state('gallery-edit').on( 'update', function( selection ) {
 					var shortcode = gallery.shortcode( selection ).string().slice( 1, -1 );
 					ed.dom.setAttrib( el, 'title', shortcode );
 				});
-                alert("g3client addCommand done");
+				//alert("g3client addCommand done");
 			});
 
 			ed.onInit.add(function(ed) {
@@ -72,15 +71,15 @@
 				o.content = t._do_g3client(o.content);
 			});
             
-            ed.onSetContent.add(function(ed, o) {
-				o.content = t._do_g3client(o.content);
-			});
+			//ed.onSetContent.add(function(ed, o) {
+			//	o.content = t._do_g3client(o.content);
+			//});
 
-            ed.onExecCommand.add(function(ed, cmd, ui, val) {
-                if( cmd == "mceInsertContent" ) {
-                    ed.setContent( t._do_g3client(ed.getContent({format : 'raw'})) );
-                }
-            });
+			ed.onExecCommand.add(function(ed, cmd, ui, val) {
+				if( cmd == "mceInsertContent" ) {
+					ed.setContent( t._do_g3client(ed.getContent({format : 'raw'})) );
+				}
+			});
 
 			ed.onPostProcess.add(function(ed, o) {
 				if (o.get)
@@ -89,40 +88,58 @@
 		},
 
 
-
 		_do_g3client : function(co) {
-//			return co.replace(/\[g3client([^\]]*)\]/g, function(a,b){
-//				return '<img src="'+tinymce.baseURL+'/plugins/g3client/img/g3logo.png" class="g3client mceItem" title="g3client'+tinymce.DOM.encode(b)+'" />';
-//			});
+			//return co.replace(/\[g3client([^\]]*)\]/g, function(a,b){
+			//	return '<img src="'+tinymce.baseURL+'/plugins/mceg3client/img/g3logo.png" class="g3client mceItem" title="g3client'+tinymce.DOM.encode(b)+'" />';
+			//});
+
+			var t=this;
 
 			ret = co.replace(/\[g3client([^\]]*)\]/g, function(a,b){
 
-                var img = tinymce.baseURL+'/plugins/mceg3client/img/g3logo.png';
-                var html = '<img src="'+img+'" class="g3client mceItem" title="g3client'+tinymce.DOM.encode(b)+'"/>';
-                var res = b.trim().split("="); 
-                if ( res.indexOf("item") != -1 ) 
-                {
-                    var item=res[res.indexOf("item") + 1];
-                    var html1 = html;
-                    html = a;
-                    var ok = false;
-                    jQuery.getJSON(ajaxurl, {what: 'meta', node: item, action: 'gallery3proxy', async: false }, function(data) {
-                        //console.log("got data: "+JSON.stringify(data));
-                        if( data.type!=null && data.thumbnail.url != undefined )
-                        {
-                            ok = true;
-                            img = data.thumbnail.url;
-                        } 
-                    })
-                        .done(function() {
-                            html2 = '<img src="'+img+'" class="g3client mceItem" title="g3client'+tinymce.DOM.encode(b)+'" />';
-                            fullco = tinyMCE.activeEditor.getContent({format : 'raw'});
-                            fullco = fullco.replace(html,html2);
-                            tinyMCE.activeEditor.setContent(fullco);
-                        });
-                }
+				var img = tinymce.baseURL+'/plugins/mceg3client/img/g3logo.png';
+				var img_att = ' class="g3client mceItem" title="g3client'+tinymce.DOM.encode(b)+'"';
+				var html = '<img src="'+img+'"'+img_att+'/>';
+
+				var res = b.trim().split("="); 
+				if ( res.indexOf("item") != -1 ) 
+				{
+					var item=res[res.indexOf("item") + 1];
+					//console.log("===== item "+item);
+					html = a; // default return value is original text
+					//console.log("nodes: "+JSON.stringify(t.nodes));
+					if( item in t.nodes )
+					{
+						if(t.nodes[item] == "waiting")// if we are waiting for result for this node, return original text
+						{
+							return html;
+						}
+						else {
+							img = t.nodes[item].thumbnail.url;
+							return '<img src="'+img+'"'+img_att+'/>';
+						}
+					}
+					t.nodes[item] = "waiting" // save info that we are waiting for result for this node
+					// this should probably go into another function for easier code reading
+					jQuery.getJSON(ajaxurl, {what: 'meta', node: item, action: 'gallery3proxy', async: false }, function(data) {
+						//console.log("got data: "+JSON.stringify(data));
+						if( data.type!=null && data.thumbnail.url != undefined )
+						{
+							t.nodes[item] = data;
+							img = data.thumbnail.url;
+							// as this happens asynchronously (probably after calling function has exited) 
+							// we have to modify editor content directly
+							html2 = '<img src="'+img+'"'+img_att+'/>';
+							fullco = tinyMCE.activeEditor.getContent({format : 'raw'});
+							fullco = fullco.replace(html,html2);
+							tinyMCE.activeEditor.setContent(fullco);
+						} 
+					})
+					// TODO handle done/failure?
+				}
 				return html;
 			});
+
             return ret;
 		},
 
@@ -165,7 +182,6 @@
 			});
 
 			tinymce.dom.Event.add(editButton, 'mousedown', function(e) {
-                //alert("g3client _createButtons edit!");
 				var ed = tinymce.activeEditor;
 				ed.wpGalleryBookmark = ed.selection.getBookmark('simple');
 				ed.execCommand("G3Client");
@@ -180,14 +196,11 @@
 				height : '24',
 				title : ed.getLang('wordpress.delgallery')
 			});
-            //alert("g3client _createButtons "+ t.url+'/img/delete.png');
-            //alert("g3client _createButtons dell: "+JSON.stringify(dellButton));
 
 			tinymce.dom.Event.add(dellButton, 'mousedown', function(e) {
 				var ed = tinymce.activeEditor, el = ed.selection.getNode();
 
 				if ( el.nodeName == 'IMG' && ed.dom.hasClass(el, 'g3client') ) {
-                //alert("g3client _createButtons delete!");
 					ed.dom.remove(el);
 
 					ed.execCommand('mceRepaint');
@@ -203,7 +216,6 @@
 		_hideButtons : function(ed) 
         {
 			var DOM = tinymce.DOM;
-            //alert("hide "+DOM+" / "+ DOM.select('#g3clientbtns')+" / "+DOM.select('#wp_editbtns, #wp_gallerybtns'));
 			DOM.hide( DOM.select('#g3clientbtns') );
             ed.plugins.wordpress._hideButtons();
 		},
