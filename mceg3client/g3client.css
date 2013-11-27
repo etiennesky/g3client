@@ -1,0 +1,25 @@
+/* from wp-includes/css/editor.css */
+#g3clientbtns {
+	padding: 2px;
+	position: absolute;
+	display: none;
+	z-index: 155000;
+}
+
+#g3client_edit,
+#g3client_del {
+	border-color: #999;
+	background-color: #eee;
+	margin: 2px;
+	padding: 2px;
+	border-width: 1px;
+	border-style: solid;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#g3client_edit:hover,
+#g3client_del:hover {
+	border-color: #555;
+	background-color: #ccc;
+}

@@ -54,6 +54,9 @@ add_action('init', 'G3Client_Init');
 add_action('widgets_init', 'G3Client_RegisterWidgets');
 
 if(is_admin()){
+
+    require_once(ABSPATH . 'wp-includes/pluggable.php');
+
     add_action('admin_menu', 'G3Client_AdminMenuHook');
     add_action('admin_init', 'G3Client_RegisterSettings');
 
@@ -64,8 +67,12 @@ if(is_admin()){
         add_action('admin_notices', 'G3Client_AdminSettingsWarning');
     }
     add_filter('tiny_mce_before_init','G3client_editor_mce_valid_elements', 0);
-}
 
+    if ( get_user_option('rich_editing') == 'true') {
+        add_filter("mce_external_plugins", "G3Client_tinymce_plugin");		
+        //Applying the filter if you're using the rich text editor
+     }
+}
 
 /** settings incomplete warning */
 function G3Client_AdminSettingsWarning(){
@@ -166,6 +173,12 @@ function G3client_editor_mce_valid_elements($init)
     else
         $init['extended_valid_elements'] = "a[*],img[*]";
     return $init;
+}
+
+function G3Client_tinymce_plugin($plugin_array) {
+    $plugin_array['g3client'] = 'plugins/mceg3client/g3client.js';
+    wp_enqueue_style('g3client', '/wp-includes/js/tinymce/plugins/mceg3client/g3client.css');
+    return $plugin_array;
 }
 
 ?>
