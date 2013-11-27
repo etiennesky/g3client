@@ -120,7 +120,7 @@ echo <<<EOT
 									</p>
                                     <p>&nbsp;</p>
 					                <p><span class='savesend pickerCanEmbed'>
-						                <input type='button' class='button' name='send' onclick="generateImageHtml();" value='Insert into Post' /> 
+						                <input type='button' class='button' name='send' onclick="generateHtml();" value='Insert into Post' /> 
 						                <a href='#' class='del-link' onclick="parent.eval('tb_remove()'); return false;">Cancel</a>
 					                </span></p>
 									<input type="button" onclick="importImage($node_id);" class="button" value="Import into WordPress" />
@@ -152,6 +152,8 @@ echo <<<EOT
 					</th>
 					<td class='field'>
 						<input type='text' class='text urlfield' name="pickerUrl" id="pickerUrl" value="" /><br />
+						<input type='hidden' name="type" id="type" value="" /><br />
+						<input type='hidden' name="node" id="node" value="" /><br />
 						<input type='hidden' name="fullUrl" id="fullUrl" value="" /><br />
 						<button type='button' id="urlButtonEmpty" class='button urlnone' onclick="buttonToField(this,'pickerUrl');" title="">None</button>
 						<button type='button' id="urlButtonGallery" class='button urlfile' onclick="buttonToField(this,'pickerUrl');" title="">Gallery page</button>

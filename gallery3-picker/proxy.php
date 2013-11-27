@@ -96,6 +96,8 @@ class gallery3Proxy {
 		$sizes[] = $size;
         }
 		
+        $return['type'] = $ent->{'type'};
+        $return['node'] = $node;
 		$return['thumbnail'] = array(
 			'url' => gallery3Proxy::getThumbByEntity($ent),
 			'width' => $ent->{'thumb_width'},
@@ -110,6 +112,7 @@ class gallery3Proxy {
 		if ( $ent->{'type'} == 'album' ) {
             //$return['url'] = $ent->{'web_url'};
             // TODO insert g3client stuff?
+            //$return['url'] = '/photo?&item=' . $node;
             $return['url'] = '/photo?&item=' . $node;
         }
         else {

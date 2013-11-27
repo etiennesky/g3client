@@ -69,6 +69,8 @@ function updateImageMeta(data)
 		jQuery('#pickerSizeContainer').append(html);
 	}	
 	
+	jQuery('#type').val(data.type);
+	jQuery('#node').val(data.node);
 	jQuery('#pickerUrl').val(data.url);
 	jQuery('#fullUrl').val(data.fullUrl);
 	jQuery('#urlButtonGallery').attr('title', data.url);
@@ -107,6 +109,15 @@ function attr_safe(inputText)
 	return inputText;
 }
 
+function generateHtml()
+{
+    var type = jQuery('input[name=type]').val();
+    if (  type != undefined && type == "album" )
+        return generateAlbumHtml();
+    else
+        return generateImageHtml();
+}
+
 function generateImageHtml()
 {
 	var html = '';
@@ -140,6 +151,15 @@ function generateImageHtml()
 
 	//alert(html);
 	
+	parent.send_to_editor(html);	
+}
+
+function generateAlbumHtml()
+{
+	var html = '';
+	
+    html += '[g3client item=' + jQuery('input[name=node]').val() + ']';
+
 	parent.send_to_editor(html);	
 }
 
