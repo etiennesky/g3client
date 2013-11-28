@@ -71,6 +71,7 @@ if(is_admin()){
     if ( get_user_option('rich_editing') == 'true') {
         add_filter("mce_external_plugins", "G3Client_tinymce_plugin");		
         //Applying the filter if you're using the rich text editor
+		add_action( 'admin_enqueue_scripts', 'G3Client_print_config' );
      }
 }
 
@@ -179,6 +180,18 @@ function G3Client_tinymce_plugin($plugin_array) {
     $plugin_array['g3client'] = 'plugins/mceg3client/g3client.js';
     wp_enqueue_style('g3client', '/wp-includes/js/tinymce/plugins/mceg3client/g3client.css');
     return $plugin_array;
+}
+
+//http://wpengineer.com/2315/wordpress-options-passed-to-javascript-1/
+function G3Client_print_config() {
+	
+	$config = array( 'restapiurl' => get_option(G3_SETTINGS_APIURL), 
+					 'restapikey' => get_option(G3_SETTINGS_APIKEY) );
+?>
+	<script type="text/javascript">
+		var G3Client_config = <?php echo json_encode( $config ); ?>;
+	</script>
+	<?php
 }
 
 ?>

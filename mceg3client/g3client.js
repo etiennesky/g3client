@@ -9,6 +9,7 @@
 			t.url = url;
 			t.editor = ed;
 			t._createButtons();
+			t.g3config = G3Client_config;
 
 			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('...');
 			ed.addCommand('G3Client', function() {
@@ -105,9 +106,7 @@
 				if ( res.indexOf("item") != -1 ) 
 				{
 					var item=res[res.indexOf("item") + 1];
-					//console.log("===== item "+item);
 					html = a; // default return value is original text
-					//console.log("nodes: "+JSON.stringify(t.nodes));
 					if( item in t.nodes )
 					{
 						if(t.nodes[item] == "waiting")// if we are waiting for result for this node, return original text
@@ -115,27 +114,37 @@
 							return html;
 						}
 						else {
-							img = t.nodes[item].thumbnail.url;
+							img = t.nodes[item].entity.thumb_url_public;
 							return '<img src="'+img+'"'+img_att+'/>';
 						}
 					}
+
 					t.nodes[item] = "waiting" // save info that we are waiting for result for this node
+
 					// this should probably go into another function for easier code reading
-					jQuery.getJSON(ajaxurl, {what: 'meta', node: item, action: 'gallery3proxy', async: false }, function(data) {
-						//console.log("got data: "+JSON.stringify(data));
-						if( data.type!=null && data.thumbnail.url != undefined )
-						{
-							t.nodes[item] = data;
-							img = data.thumbnail.url;
-							// as this happens asynchronously (probably after calling function has exited) 
-							// we have to modify editor content directly
-							html2 = '<img src="'+img+'"'+img_att+'/>';
-							fullco = tinyMCE.activeEditor.getContent({format : 'raw'});
-							fullco = fullco.replace(html,html2);
-							tinyMCE.activeEditor.setContent(fullco);
-						} 
-					})
-					// TODO handle done/failure?
+					//jQuery.getJSON(ajaxurl, {what: 'meta', node: item, action: 'gallery3proxy'}, function(data) {
+					jQuery.ajax({ 
+						dataType: "json", data: {}, type: "GET", 
+						url: t.g3config['restapiurl'] + '/item/' + item,
+						//success: successFunc, error: errorFunc,				
+						beforeSend: function(xhr){
+							xhr.setRequestHeader('X-Gallery-Request-Key',t.g3config['restapikey']); },
+						success : function(data) {
+							//console.log("got data: "+JSON.stringify(data));
+							if( data.entity!=undefined && data.entity.thumb_url_public != undefined )
+							{
+								t.nodes[item] = data;
+								img = data.entity.thumb_url_public;
+								// as this happens asynchronously (probably after calling function has exited) 
+								// we have to modify editor content directly
+								html2 = '<img src="'+img+'"'+img_att+'/>';
+								fullco = tinyMCE.activeEditor.getContent({format : 'raw'});
+								fullco = fullco.replace(html,html2);
+								tinyMCE.activeEditor.setContent(fullco);
+							} 
+						}						
+					});
+
 				}
 				return html;
 			});
