@@ -1,5 +1,20 @@
 // based on wpgallery js script
 
+if (!Array.prototype.remove)
+{
+    /**
+     * Add array.remove() convenience method to remove element from array.
+     *
+     * @param {Object} elem Element to remove.
+     */
+    Array.prototype.remove = function(elem) {
+        var index = this.indexOf(elem);
+         
+        if (index !== -1) {
+            this.splice(index, 1);
+        }       
+    };
+}
 (function() {
 	tinymce.create('tinymce.plugins.g3client', {
 
@@ -77,6 +92,7 @@
 			//});
 
 			ed.onExecCommand.add(function(ed, cmd, ui, val) {
+				//console.log("command: "+cmd+" - "+ui+" - "+val);
 				if( cmd == "mceInsertContent" ) {
 					ed.setContent( t._do_g3client(ed.getContent({format : 'raw'})) );
 				}
@@ -98,14 +114,16 @@
 
 			ret = co.replace(/\[g3client([^\]]*)\]/g, function(a,b){
 
+				var attrs = wp.shortcode.attrs(b);
 				var img = tinymce.baseURL+'/plugins/mceg3client/img/g3logo.png';
-				var img_att = ' class="g3client mceItem" title="g3client'+tinymce.DOM.encode(b)+'"';
+				var classes = 'g3client mceItem';
+				if ( attrs.named['class'] != undefined ) classes += ' ' + attrs.named['class'];
+				var img_att = ' class="'+classes+'" title="g3client'+tinymce.DOM.encode(b)+'"';
 				var html = '<img src="'+img+'"'+img_att+'/>';
 
-				var res = b.trim().split("="); 
-				if ( res.indexOf("item") != -1 ) 
+				if ( attrs.named.item != undefined ) 
 				{
-					var item=res[res.indexOf("item") + 1];
+					var item = attrs.named.item;
 					html = a; // default return value is original text
 					if( item in t.nodes )
 					{
@@ -123,14 +141,13 @@
 
 					// this should probably go into another function for easier code reading
 					//jQuery.getJSON(ajaxurl, {what: 'meta', node: item, action: 'gallery3proxy'}, function(data) {
+					var url = t.g3config['restapiurl'] + 'item/' + item; // TODO remove quotes?
 					jQuery.ajax({ 
-						dataType: "json", data: {}, type: "GET", 
-						url: t.g3config['restapiurl'] + '/item/' + item,
+						dataType: "json", data: {}, type: "GET", url: url,
 						//success: successFunc, error: errorFunc,				
 						beforeSend: function(xhr){
 							xhr.setRequestHeader('X-Gallery-Request-Key',t.g3config['restapikey']); },
 						success : function(data) {
-							//console.log("got data: "+JSON.stringify(data));
 							if( data.entity!=undefined && data.entity.thumb_url_public != undefined )
 							{
 								t.nodes[item] = data;
@@ -142,14 +159,25 @@
 								fullco = fullco.replace(html,html2);
 								tinyMCE.activeEditor.setContent(fullco);
 							} 
-						}						
+						},
+						error : function(data) { 
+							console.log('ajax query of url '+url+' returned error: '+JSON.stringify(data));
+						}			
 					});
-
 				}
-				return html;
+ 				return html;
 			});
 
             return ret;
+		},
+
+		_shortcode_single : function(code) {
+			code = code.trim();
+			var i = code.indexOf(' ');
+			return new wp.shortcode({ 
+				tag: code.substring( 0, i ), 
+				attrs: code.substring( i+1, code.length ), 
+				type: 'single', content : '' });
 		},
 
 		_get_g3client : function(co) {
@@ -159,11 +187,36 @@
 				return n ? tinymce.DOM.decode(n[1]) : '';
 			};
 
-			return co.replace(/(?:<p[^>]*>)*(<img[^>]+>)(?:<\/p>)*/g, function(a,im) {
-				var cls = getAttr(im, 'class');
+			var t = this;
 
-				if ( cls.indexOf('g3client') != -1 )
-					return '<p>['+tinymce.trim(getAttr(im, 'title'))+']</p>';
+			return co.replace(/(?:<p[^>]*>)*(<img[^>]+>)(?:<\/p>)*/g, function(a,im) {
+
+				var cls = getAttr(im, 'class');
+				var title = tinymce.trim(getAttr(im, 'title'));
+
+				if ( cls.indexOf('g3client') != -1 && title.indexOf('g3client') == 0 ) {
+
+					// find which align value to apply
+					var align = '';			
+					var align_types = [ 'alignright', 'aligncenter', 'alignleft' ];
+					jQuery.each(align_types, function( index, value ) {
+						if ( cls.indexOf(value) != -1 ) align = value;
+					});
+
+					//remove all align* classes, and add new align if present
+ 					sc = t._shortcode_single(title);
+					var classes = new Array();
+					if ( sc.attrs.named['class'] != undefined ) {
+						classes = sc.attrs.named['class'].split(' ');
+						jQuery.each(align_types, function( index, value ) { classes.remove(value); });
+					}
+					if ( align != '' ) classes.push( align ); 
+					if( classes.length>0 ) sc.attrs.named['class'] = classes.join(" ");
+					else delete sc.attrs.named['class'];
+					if ( sc.attrs.named['class'] == '' ) delete sc.attrs.named['class'];
+
+					return '<p>'+sc.string()+'</p>';
+				}
 
 				return a;
 			});

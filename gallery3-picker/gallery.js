@@ -142,15 +142,19 @@ function generateImageHtml()
     }
 	html += '<img src="' + attr_safe(img[2]) + '" ';
 	html += 'class="';
-	if (caption == '') { jQuery('input:radio[name=align]:checked').val(); }
+	console.log(caption+" / "+align);
+	console.log(JSON.stringify(jQuery('input:radio[name=align]')));
+	//console.log(jQuery('input:radio[name=align]:checked').val());
+	if (caption == '') { html += align; }
 	html += '" ';
 	html += 'width="' + attr_safe(img[0]) + '" height="' + attr_safe(img[1]) + '" ';
 	html += '>';
 	if (link != '') { html += '</a>'; }
 	if (caption != '') { html += '[/caption]'; }
 
-	//alert(html);
-	
+	// TMP
+	//html = '[g3client item=' + jQuery('input[name=node]').val() + ']';
+
 	parent.send_to_editor(html);	
 }
 
