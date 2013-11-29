@@ -35,10 +35,12 @@ function G3Client_Shortcode_Handler($atts) {
 	$breadcrumbAlbumDefault = get_option(G3_SETTINGS_SHOWBREADCRUMB_ALBUM, 'on');
 	$breadcrumbPhotoDefault = get_option(G3_SETTINGS_SHOWBREADCRUMB_PHOTO, 'on');
 	$thumbtitlesDefault = get_option(G3_SETTINGS_SHOWTHUMBTITLES, 'off');
+	$singletitlesDefault = get_option(G3_SETTINGS_SHOWTHUMBTITLES, 'off');
 	$lightboxDefault = get_option(G3_SETTINGS_USELIGHTBOX, 'on');
 	$albumHeading = get_option(G3_SETTINGS_SHOWALBUMHEADING, 'on');
 	$photoHeading = get_option(G3_SETTINGS_SHOWPHOTOHEADING, 'on');
 	$showChildren = get_option(G3_SETTINGS_SHOWCHILDREN, 'on');
+	$singleSizeDefault = get_option(G3_SETTINGS_SINGLESIZE, 'resize');
 	$class = ''; // TODO add default class value?
 
 	if( array_key_exists( 'breadcrumb', $atts ) ) {
@@ -54,10 +56,12 @@ function G3Client_Shortcode_Handler($atts) {
 		'breadcrumbAlbum' => $breadcrumbAlbumDefault,
 		'breadcrumbPhoto' => $breadcrumbPhotoDefault,
 		'thumbtitles' => $thumbtitlesDefault,
+		'singletitles' => $singletitlesDefault,
 		'lightbox' => $lightboxDefault,
 		'albumheading' => $albumHeading,
 		'photoheading' => $photoHeading,
 		'children' => $showChildren,
+		'singlesize' => $singleSizeDefault,
 		'class' => $class
 	), $atts));
 
@@ -70,6 +74,7 @@ function G3Client_Shortcode_Handler($atts) {
 	$breadcrumbAlbum = G3Client_ParseBoolean($breadcrumbAlbum);
 	$breadcrumbPhoto = G3Client_ParseBoolean($breadcrumbPhoto);
 	$thumbtitles = G3Client_ParseBoolean($thumbtitles);
+	$singletitles = G3Client_ParseBoolean($singletitles);
 	$lightbox = G3Client_ParseBoolean($lightbox);
 	$albumHeading = G3Client_ParseBoolean($albumHeading);
 	$photoHeading = G3Client_ParseBoolean($photoHeading);
@@ -79,30 +84,33 @@ function G3Client_Shortcode_Handler($atts) {
 		case 'html':
 			$outputFormatter = new G3Client_HTMLOutput(
 				$itemsperrow, $sluginsingleview, $breadcrumbAlbum, 
-				$breadcrumbPhoto, $thumbtitles, $albumHeading,
-				$photoHeading, $lightbox, $showChildren, $class);
+				$breadcrumbPhoto, $thumbtitles, $singletitles, $albumHeading,
+				$photoHeading, $lightbox, $showChildren, $singlesize, $class);
 			break;
 
 		default:
 			$outputFormatter = new G3Client_HTMLOutput(
 				$itemsperrow, $sluginsingleview, $breadcrumbAlbum, 
-				$breadcrumbPhoto, $thumbtitles, $albumHeading,
-				$photoHeading, $lightbox, $showChildren, $class);
+				$breadcrumbPhoto, $thumbtitles, $singletitles, $albumHeading,
+				$photoHeading, $lightbox, $showChildren, $singlesize, $class);
 
 	}
 
     if($outputFormatter == false) {
         return __('Internal error: could not select G3Client output formatter', 'g3client');
     } else {
+
         $outputFormatter->setOutputOptions(array(
             G3_SETTINGS_ITEMS_PER_ROW => $itemsperrow,
             G3_SETTINGS_SHOWBREADCRUMB_ALBUM => $breadcrumbAlbum,
             G3_SETTINGS_SHOWBREADCRUMB_PHOTO => $breadcrumbPhoto,
             G3_SETTINGS_SHOWTHUMBTITLES => $thumbtitles,
+            G3_SETTINGS_SHOWSINGLETITLES => $singletitles,
             G3_SETTINGS_USELIGHTBOX => $lightbox,
             G3_SETTINGS_SHOWALBUMHEADING => $albumHeading,
             G3_SETTINGS_SHOWPHOTOHEADING => $photoHeading,
             G3_SETTINGS_SHOWCHILDREN => $showChildren,
+            G3_SETTINGS_SINGLESIZE => $singlesize,
             G3_SETTINGS_ITEM_CLASS => $class
         ));
 

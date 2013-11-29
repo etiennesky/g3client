@@ -42,6 +42,7 @@ define('G3_SETTINGS_SHOWSLUGINSINGLEVIEW', 'g3_showsluginsingleview');
 define('G3_SETTINGS_SHOWBREADCRUMB_ALBUM', 'g3_showbreadcrumb_albums');
 define('G3_SETTINGS_SHOWBREADCRUMB_PHOTO', 'g3_showbreadcrumb_photos');
 define('G3_SETTINGS_SHOWTHUMBTITLES', 'g3_showthumbtitles');
+define('G3_SETTINGS_SHOWSINGLETITLES', 'g3_showsingletitles');
 define('G3_SETTINGS_USELIGHTBOX', 'g3_uselightbox');
 define('G3_SETTINGS_SHOWALBUMHEADING', 'g3_showalbumheading');
 define('G3_SETTINGS_SHOWPHOTOHEADING', 'g3_showphotoheading');
@@ -50,7 +51,9 @@ define('G3_SETTINGS_SHOWCHILDREN', 'g3_showchildren');
 define('G3_SETTINGS_USERCSSFILE', 'g3_usercssfile');
 define('G3_SETTINGS_ALBUMSHEADING', 'g3_albumsheading');
 define('G3_SETTINGS_PHOTOSHEADING', 'g3_photosheading');
+// this not a setting for now, just use the name in shortcode handling
 define('G3_SETTINGS_ITEM_CLASS', 'g3_item_class');
+define('G3_SETTINGS_SINGLESIZE', 'g3_singlesize');
 
 add_action('init', 'G3Client_Init');
 add_action('widgets_init', 'G3Client_RegisterWidgets');
@@ -123,6 +126,7 @@ function G3Client_RegisterSettings() {
 	register_setting('g3client-settings', G3_SETTINGS_SHOWBREADCRUMB_ALBUM);
 	register_setting('g3client-settings', G3_SETTINGS_SHOWBREADCRUMB_PHOTO);
 	register_setting('g3client-settings', G3_SETTINGS_SHOWTHUMBTITLES);
+	register_setting('g3client-settings', G3_SETTINGS_SHOWSINGLETITLES);
 	register_setting('g3client-settings', G3_SETTINGS_USELIGHTBOX);
 	register_setting('g3client-settings', G3_SETTINGS_LIGHTBOXCOMPATMODE);
 	register_setting('g3client-settings', G3_SETTINGS_SHOWALBUMHEADING);
@@ -131,6 +135,7 @@ function G3Client_RegisterSettings() {
 	register_setting('g3client-settings', G3_SETTINGS_USERCSSFILE);
     register_setting('g3client-settings', G3_SETTINGS_ALBUMSHEADING);
     register_setting('g3client-settings', G3_SETTINGS_PHOTOSHEADING);
+    register_setting('g3client-settings', G3_SETTINGS_SINGLESIZE);
 }
 
 /** initializes g3client */

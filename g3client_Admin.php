@@ -83,6 +83,12 @@ function G3Client_AdminPage() {
 		</td>
 	</tr>
 	<tr valign="top">
+		<th scope="row"><?php _e('Single photo titles', 'g3client') ?></th>
+		<td>
+			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWSINGLETITLES ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWSINGLETITLES)) ?>/> <?php _e('Show titles for single photos.', 'g3client') ?></label>
+		</td>
+	</tr>
+	<tr valign="top">
 		<th scope="row"><?php _e('Show albums heading', 'g3client') ?></th>
 		<td>
 			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWALBUMHEADING ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWALBUMHEADING, 'on')) ?>/> <?php _e('Show an head line above the album listings.', 'g3client') ?></label>
@@ -105,6 +111,16 @@ function G3Client_AdminPage() {
 		<th scope="row"><?php _e('Show children of album', 'g3client') ?></th>
 		<td>
 			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWCHILDREN ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWCHILDREN, 'on')) ?>/> <?php _e('Show each child image instead of root album image.', 'g3client') ?></label>
+		</td>
+	</tr>
+	<tr valign="top">
+		<th scope="row"><?php _e('Default single photo size', 'g3client') ?></th>
+		<td>
+			 <?php $single_size=get_option(G3_SETTINGS_SINGLESIZE, 'resize'); ?>
+	         <input type="radio" name="<?php echo G3_SETTINGS_SINGLESIZE ?>" value="thumb" <?php if($single_size=='thumb') echo ' checked '; ?> /> <?php _e('Thumb', 'g3client') ?> &nbsp;
+			 <input type="radio" name="<?php echo G3_SETTINGS_SINGLESIZE ?>" value="resize" <?php if($single_size=='resize') echo ' checked '; ?> /> <?php _e('Resize', 'g3client') ?> &nbsp;
+			 <input type="radio" name="<?php echo G3_SETTINGS_SINGLESIZE ?>" value="full" <?php if($single_size=='full') echo ' checked '; ?> /> <?php _e('Full', 'g3client') ?>&nbsp;&nbsp;
+			 <span class="description">Note that full size is not recommended, it is better to use thumb or resize(default).</span>
 		</td>
 	</tr>
 </table>
@@ -219,6 +235,11 @@ function G3Client_AdminPage() {
     		<td><code>yes</code> <?php _e('or', 'g3client') ?> <code>no</code></td>
     	</tr>
     	<tr>
+    		<td><code>singletitles</code></td>
+    		<td><?php _e('show the titles in single view', 'g3client') ?></td>
+    		<td><code>yes</code> <?php _e('or', 'g3client') ?> <code>no</code></td>
+    	</tr>
+    	<tr>
     		<td><code>albumheading</code></td>
     		<td><?php _e('show a head line above the albums listing', 'g3client') ?></td>
     		<td><code>yes</code> <?php _e('or', 'g3client') ?> <code>no</code></td>
@@ -237,6 +258,11 @@ function G3Client_AdminPage() {
     		<td><code>children</code></td>
     		<td><?php _e('show children of album', 'g3client') ?></td>
     		<td><code>yes</code> <?php _e('or', 'g3client') ?> <code>no</code></td>
+    	</tr>
+    	<tr>
+    		<td><code>singlesize</code></td>
+    		<td><?php _e('single photo size', 'g3client') ?></td>
+	    	<td><code>thumb</code>, <code>resize</code> <?php _e('or', 'g3client') ?> <code>full</code></td>
     	</tr>
     </tbody>
 </table>

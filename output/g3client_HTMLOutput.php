@@ -127,9 +127,18 @@ class G3Client_HTMLOutput extends G3Client_Output {
 
 	private function generateSingleView($item) {
 		$result = '<div class="g3client_singleview">';
-		$result .= '<img src="' . $item['imgurl']  . '" alt="">';
-		//$result .= '<img src="' . $item['thumb']  . '" alt="">';
-		$result .= '<p class="g3client_singletitle">' . $item['title'] . '</p>';
+
+		// TODO add g3client_image class for lightbox and fix span (that has a border now for debug)
+		//$result .= '<img src="' . $item['imgurl']  . '" alt="">';
+		if($this->getOption(G3_SETTINGS_SINGLESIZE) == 'thumb')
+			$result .= '<img src="' . $item['thumb']  . '" alt="" title="' . $item['title'] . '">';
+		else if($this->getOption(G3_SETTINGS_SINGLESIZE) == 'full')
+			$result .= '<img src="' . $item['full_imgurl']  . '" alt="" title="' . $item['title'] . '">';
+		else
+			$result .= '<img src="' . $item['imgurl']  . '" alt="" title="' . $item['title'] . '">';
+
+ 		if($this->getOption(G3_SETTINGS_SHOWSINGLETITLES))
+		  $result .= '<p class="g3client_singletitle">' . $item['title'] . '</p>';
 		if($this->getOption(G3_SETTINGS_SHOWSLUGINSINGLEVIEW) && !empty($item['slug']) &&
 		    strcmp($item['slug'], $item['title']) != 0)
 		        $result .= '<p class="g3client_singleslug">' . $item['slug']  .'</p>';
