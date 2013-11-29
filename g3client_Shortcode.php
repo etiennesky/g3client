@@ -32,24 +32,33 @@ function G3Client_Shortcode_Handler($atts) {
 	if(!is_numeric($itemsPerRowDefault)) $itemsPerRowDefault = 3;
 
 	$slugInSingleViewDefault = get_option(G3_SETTINGS_SHOWSLUGINSINGLEVIEW, 'off');
-	$breadcrumbDefault = get_option(G3_SETTINGS_SHOWBREADCRUMB, 'on');
+	$breadcrumbAlbumDefault = get_option(G3_SETTINGS_SHOWBREADCRUMB_ALBUM, 'on');
+	$breadcrumbPhotoDefault = get_option(G3_SETTINGS_SHOWBREADCRUMB_PHOTO, 'on');
 	$thumbtitlesDefault = get_option(G3_SETTINGS_SHOWTHUMBTITLES, 'off');
 	$lightboxDefault = get_option(G3_SETTINGS_USELIGHTBOX, 'on');
 	$albumHeading = get_option(G3_SETTINGS_SHOWALBUMHEADING, 'on');
 	$photoHeading = get_option(G3_SETTINGS_SHOWPHOTOHEADING, 'on');
 	$showChildren = get_option(G3_SETTINGS_SHOWCHILDREN, 'on');
+	$class = ''; // TODO add default class value?
+
+	if( array_key_exists( 'breadcrumb', $atts ) ) {
+		$atts[ 'breadcrumbAlbum' ] = $atts[ 'breadcrumb' ];
+		$atts[ 'breadcrumbPhoto' ] = $atts[ 'breadcrumb' ];
+	}
 
 	extract(shortcode_atts(array(
 		'item' => -1,
 		'output' => 'html',
 		'itemsperrow' => $itemsPerRowDefault,
 		'sluginsingleview' => $slugInSingleViewDefault,
-		'breadcrumb' => $breadcrumbDefault,
+		'breadcrumbAlbum' => $breadcrumbAlbumDefault,
+		'breadcrumbPhoto' => $breadcrumbPhotoDefault,
 		'thumbtitles' => $thumbtitlesDefault,
 		'lightbox' => $lightboxDefault,
 		'albumheading' => $albumHeading,
 		'photoheading' => $photoHeading,
-		'children' => $showChildren
+		'children' => $showChildren,
+		'class' => $class
 	), $atts));
 
 	if(isset($_GET['item']) && is_numeric($_GET['item']))
@@ -58,7 +67,8 @@ function G3Client_Shortcode_Handler($atts) {
 	$outputFormatter = false;
 
 	$sluginsingleview = G3Client_ParseBoolean($sluginsingleview);
-	$breadcrumb = G3Client_ParseBoolean($breadcrumb);
+	$breadcrumbAlbum = G3Client_ParseBoolean($breadcrumbAlbum);
+	$breadcrumbPhoto = G3Client_ParseBoolean($breadcrumbPhoto);
 	$thumbtitles = G3Client_ParseBoolean($thumbtitles);
 	$lightbox = G3Client_ParseBoolean($lightbox);
 	$albumHeading = G3Client_ParseBoolean($albumHeading);
@@ -68,14 +78,16 @@ function G3Client_Shortcode_Handler($atts) {
 	switch(strtolower($output)) {
 		case 'html':
 			$outputFormatter = new G3Client_HTMLOutput(
-				$itemsperrow, $sluginsingleview, $breadcrumb, $thumbtitles, $albumHeading,
-					$photoHeading, $lightbox, $showChildren);
+				$itemsperrow, $sluginsingleview, $breadcrumbAlbum, 
+				$breadcrumbPhoto, $thumbtitles, $albumHeading,
+				$photoHeading, $lightbox, $showChildren, $class);
 			break;
 
 		default:
 			$outputFormatter = new G3Client_HTMLOutput(
-				$itemsperrow, $sluginsingleview, $breadcrumb, $thumbtitles, $albumHeading,
-					$photoHeading, $lightbox, $showChildren);
+				$itemsperrow, $sluginsingleview, $breadcrumbAlbum, 
+				$breadcrumbPhoto, $thumbtitles, $albumHeading,
+				$photoHeading, $lightbox, $showChildren, $class);
 
 	}
 
@@ -84,13 +96,14 @@ function G3Client_Shortcode_Handler($atts) {
     } else {
         $outputFormatter->setOutputOptions(array(
             G3_SETTINGS_ITEMS_PER_ROW => $itemsperrow,
-            G3_SETTINGS_SHOWSLUGINSINGLEVIEW => $sluginsingleview,
-            G3_SETTINGS_SHOWBREADCRUMB => $breadcrumb,
+            G3_SETTINGS_SHOWBREADCRUMB_ALBUM => $breadcrumbAlbum,
+            G3_SETTINGS_SHOWBREADCRUMB_PHOTO => $breadcrumbPhoto,
             G3_SETTINGS_SHOWTHUMBTITLES => $thumbtitles,
             G3_SETTINGS_USELIGHTBOX => $lightbox,
             G3_SETTINGS_SHOWALBUMHEADING => $albumHeading,
             G3_SETTINGS_SHOWPHOTOHEADING => $photoHeading,
-            G3_SETTINGS_SHOWCHILDREN => $showChildren
+            G3_SETTINGS_SHOWCHILDREN => $showChildren,
+            G3_SETTINGS_ITEM_CLASS => $class
         ));
 
         return $outputFormatter->generateView($item);

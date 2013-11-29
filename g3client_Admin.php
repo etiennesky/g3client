@@ -65,9 +65,15 @@ function G3Client_AdminPage() {
 		</td>
 	</tr>
 	<tr valign="top">
-		<th scope="row"><?php _e('Show breadcrumb', 'g3client') ?></th>
+		<th scope="row"><?php _e('Show breadcrumb for albums', 'g3client') ?></th>
 		<td>
-			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWBREADCRUMB ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWBREADCRUMB)) ?>/> <?php _e('Show breadcrumb navigation on top of photo(s) or album(s).', 'g3client') ?></label>
+			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWBREADCRUMB_ALBUM ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWBREADCRUMB_ALBUM)) ?>/> <?php _e('Show breadcrumb navigation on top of album(s).', 'g3client') ?></label>
+		</td>
+	</tr>
+	<tr valign="top">
+		<th scope="row"><?php _e('Show breadcrumb for photos', 'g3client') ?></th>
+		<td>
+			 <label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWBREADCRUMB_PHOTO ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWBREADCRUMB_PHOTO, 'on')) ?>/> <?php _e('Show breadcrumb navigation on top of photo(s).', 'g3client') ?></label>
 		</td>
 	</tr>
 	<tr valign="top">

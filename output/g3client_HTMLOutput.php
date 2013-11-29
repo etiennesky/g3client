@@ -37,7 +37,8 @@ class G3Client_HTMLOutput extends G3Client_Output {
 		if(is_array($toShow) && isset($toShow['failure']))
 			return $this->getErrorMessage($toShow);
 
-		$result = '<div class="g3client_wrapper">';
+		//$result = '<div class="g3client_wrapper">';
+		$result = '<div class="g3client_wrapper ' . $this->getOption(G3_SETTINGS_ITEM_CLASS, '') . '" style="border:1px solid black" >';
 
 		$result .= $this->generateBreadcrumb($toShow);
 
@@ -45,7 +46,8 @@ class G3Client_HTMLOutput extends G3Client_Output {
 			if($this->getOption(G3_SETTINGS_SHOWALBUMHEADING, true) &&
 			    !empty($toShow['albums']) && $toShow['curitem']['id'] != 1) {
 				$result .= '<h3 class="g3client_albumscaption">';
-			    $albumsHeading = $this->getOption(G3_SETTINGS_ALBUMSHEADING, '');
+				$result .= '<h3 class="'.$class.'">';
+ 			    $albumsHeading = $this->getOption(G3_SETTINGS_ALBUMSHEADING, '');
 			    if(empty($albumsHeading)) $albumsHeading = __('There are other albums to see here...', 'g3client');
 
 			    $albumsHeading = $this->replaceTags($albumsHeading, '%children%', count($toShow['albums']));
@@ -126,6 +128,7 @@ class G3Client_HTMLOutput extends G3Client_Output {
 	private function generateSingleView($item) {
 		$result = '<div class="g3client_singleview">';
 		$result .= '<img src="' . $item['imgurl']  . '" alt="">';
+		//$result .= '<img src="' . $item['thumb']  . '" alt="">';
 		$result .= '<p class="g3client_singletitle">' . $item['title'] . '</p>';
 		if($this->getOption(G3_SETTINGS_SHOWSLUGINSINGLEVIEW) && !empty($item['slug']) &&
 		    strcmp($item['slug'], $item['title']) != 0)

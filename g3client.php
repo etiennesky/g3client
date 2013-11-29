@@ -39,7 +39,8 @@ define('G3_SETTINGS_APIKEY', 'g3_restapikey');
 define('G3_SETTINGS_OUTPUTFORMATTER', 'g3_outputformatter');
 define('G3_SETTINGS_ITEMS_PER_ROW', 'g3_itemsperrow');
 define('G3_SETTINGS_SHOWSLUGINSINGLEVIEW', 'g3_showsluginsingleview');
-define('G3_SETTINGS_SHOWBREADCRUMB', 'g3_showbreadcrumb');
+define('G3_SETTINGS_SHOWBREADCRUMB_ALBUM', 'g3_showbreadcrumb_albums');
+define('G3_SETTINGS_SHOWBREADCRUMB_PHOTO', 'g3_showbreadcrumb_photos');
 define('G3_SETTINGS_SHOWTHUMBTITLES', 'g3_showthumbtitles');
 define('G3_SETTINGS_USELIGHTBOX', 'g3_uselightbox');
 define('G3_SETTINGS_SHOWALBUMHEADING', 'g3_showalbumheading');
@@ -49,6 +50,7 @@ define('G3_SETTINGS_SHOWCHILDREN', 'g3_showchildren');
 define('G3_SETTINGS_USERCSSFILE', 'g3_usercssfile');
 define('G3_SETTINGS_ALBUMSHEADING', 'g3_albumsheading');
 define('G3_SETTINGS_PHOTOSHEADING', 'g3_photosheading');
+define('G3_SETTINGS_ITEM_CLASS', 'g3_item_class');
 
 add_action('init', 'G3Client_Init');
 add_action('widgets_init', 'G3Client_RegisterWidgets');
@@ -118,7 +120,8 @@ function G3Client_RegisterSettings() {
 	register_setting('g3client-settings', G3_SETTINGS_OUTPUTFORMATTER);
 	register_setting('g3client-settings', G3_SETTINGS_ITEMS_PER_ROW);
 	register_setting('g3client-settings', G3_SETTINGS_SHOWSLUGINSINGLEVIEW);
-	register_setting('g3client-settings', G3_SETTINGS_SHOWBREADCRUMB);
+	register_setting('g3client-settings', G3_SETTINGS_SHOWBREADCRUMB_ALBUM);
+	register_setting('g3client-settings', G3_SETTINGS_SHOWBREADCRUMB_PHOTO);
 	register_setting('g3client-settings', G3_SETTINGS_SHOWTHUMBTITLES);
 	register_setting('g3client-settings', G3_SETTINGS_USELIGHTBOX);
 	register_setting('g3client-settings', G3_SETTINGS_LIGHTBOXCOMPATMODE);

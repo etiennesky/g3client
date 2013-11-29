@@ -63,7 +63,15 @@ abstract class G3Client_Output {
      * @param curItem the item to generate the breadcrumb for
      */
     protected function generateBreadcrumb($curItem) {
-        if(empty($curItem) || !$this->getOption(G3_SETTINGS_SHOWBREADCRUMB)) return '';
+        //if(empty($curItem) || !$this->getOption(G3_SETTINGS_SHOWBREADCRUMB)) return '';
+        if(empty($curItem)) return '';
+		if($curItem['curitem']['type'] == 'album')
+		{
+			if(!$this->getOption(G3_SETTINGS_SHOWBREADCRUMB_ALBUM)) return '';
+		}
+	    else {
+			if(!$this->getOption(G3_SETTINGS_SHOWBREADCRUMB_PHOTO)) return '';
+		}
 
         $result = '<p class="g3client_breadcrumb">';
         $result .= __('You are here', 'g3client');
