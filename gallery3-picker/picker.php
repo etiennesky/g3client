@@ -524,8 +524,8 @@ EOT;
 	{
 		// Setup Default Options Array
 		$optionarray_def = array(
-			'gallery3_config_url' => 'http://bilder.sverok.se/',
-			'gallery3_name' => 'Bildbank, Sverok',
+			'gallery3_config_url' => get_option('home') . '/gallery3',
+			'gallery3_name' => 'Gallery',
 			'gallery3_api_key' => '',
 			'gallery3_g3client' => 'on',
 			'gallery3_default_size' => 'resize',
@@ -546,21 +546,19 @@ EOT;
 			update_option('gallery3_picker_options', $opts);
 			
 			gallery3Picker::gallery3_connection_test();
+
 		}
-		
+
+		$opts = get_option('gallery3_picker_options');
+		if( $opts ) $optionarray_def = $opts;
+
 		// Get Options
-		$optionarray_def = get_option('gallery3_picker_options');
 		
 		/* v <0.90 users? */
 		if ($optionarray_def['gallery3_config_url'] == '')
 		{
 			$optionarray_def['gallery3_config_url'] = $optionarray_def['gallery3_url'];
 		}
-
-		if (!array_key_exists('gallery3_g3client',$optionarray_def))
-			$optionarray_def['gallery3_g3client'] = 'off'; 
-		if (!array_key_exists('gallery3_default_size',$optionarray_def))
-			$optionarray_def['gallery3_default_size'] = 'resize'; 
 	
 		?>
 		<div class="wrap">
@@ -610,7 +608,7 @@ EOT;
 			</tr>
 			<tr valign="center"> 
 				<td width="300px" scope="row"><?php _e( 'Use [g3client] shortcodes' ) ?></td> 
-				<td><input type="checkbox" name="gallery3_g3client" id="gallery3_short_inp" <?php if($optionarray_def['gallery3_g3client']=='on') echo 'checked'; ?> /> <label for='gallery3_short_inp'><?php _e( 'Embed images as [g3client] shortcodes' ) ?></label></td>
+				<td><input type="checkbox" name="gallery3_g3client" id="gallery3_short_inp" <?php if($optionarray_def['gallery3_g3client']=='on') echo 'checked'; ?> /> <label for='gallery3_short_inp'><?php _e( 'Embed images as [g3client] shortcodes instead of &lt;img&gt; tags' ) ?></label></td>
 			</tr>
 		</table>
 			<div class="submit">

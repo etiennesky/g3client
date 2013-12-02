@@ -296,5 +296,8 @@ function G3Client_Validate() {
 		}
 		echo '</p></div>';
 	}
+	else {
+		echo "<br>==> <a href='./options-general.php?page=picker.php'>Configure Gallery3 media picker</a> <==<br><br>";
+	}
 }
 ?>
