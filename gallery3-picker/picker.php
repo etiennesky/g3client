@@ -30,7 +30,6 @@ add_action('wp_ajax_gallery3proxy', array('gallery3Proxy', 'requestHandler'));
 class gallery3Picker {	
 	function add_gallery3_picker_menu()
 	{
-        //add_options_page( __( 'Gallery3 settings' ), __( 'Gallery3 media picker' ), 8, basename(__FILE__), array('gallery3Picker', 'gallery3_picker_options_page'));
         add_options_page( __( 'Gallery3 settings' ), __( 'G3client media picker' ), 8, basename(__FILE__), array('gallery3Picker', 'gallery3_picker_options_page'));
 	}
 	
@@ -88,6 +87,10 @@ echo <<<EOT
 						action: 'gallery3proxy'
 					}, function(data) {
 						updateImageMeta(data);
+						// form specific stuff
+						// TODO hide form until query returns?
+						//if(data.options['gallery3_g3client']=='on') document.getElementById('import_wordpress').style.visibility='hidden';
+						if(data.type=='album') document.getElementById('import_wordpress').style.visibility='hidden';	
 					});
 			});
 		</script>
@@ -113,17 +116,18 @@ echo <<<EOT
 										<span id="pickerTitle"></span>
 									</p>
 									<p>
-										<span id="pickerFilename"></span><br />
+			                            <span id="pickerFilename"></span><br />
 									</p>
 									<p>
-										<span id="pickerSize"></span>
+			                            <span id="pickerSize"></span>
 									</p>
                                     <p>&nbsp;</p>
-					                <p><span class='savesend pickerCanEmbed'>
+					                <p><span class='savesend pickerCanEmbed2'>
 						                <input type='button' class='button' name='send' onclick="generateHtml();" value='Insert into Post' /> 
-						                <a href='#' class='del-link' onclick="parent.eval('tb_remove()'); return false;">Cancel</a>
+						                <!-- <a href='#' class='del-link' onclick="parent.eval('tb_remove()'); return false;">Cancel</a> -->
+						                <input type='button' class='button' name='cancel' onclick="parent.eval('tb_remove()'); return false;" value='Cancel' /> 
 					                </span></p>
-									<input type="button" onclick="importImage($node_id);" class="button" value="Import into WordPress" />
+									<input type="button" onclick="importImage($node_id);" class="button" value="Import into WordPress" id="import_wordpress" />
 								</td>
 							</tr>
 						</table>
@@ -132,6 +136,7 @@ echo <<<EOT
 				<tr class="status">
 					<td colspan="2"><span id="pickerStatus">Loading image data...</span></td>
 				</tr>
+				<tr><td>&nbsp;</td></tr>
 				<tr class='post_title pickerCanEmbed'  style="display: none;">
 					<th valign='top' scope='row' class='label'><label for='pickerTitle'><span class='alignleft'>Title</span><span class="alignright"></span><br class='clear' /></label></th>
 					<td class='field'><input type='text' class='text' id='pickerTitle' name='pickerTitle' value='' /></td>
@@ -152,16 +157,17 @@ echo <<<EOT
 					</th>
 					<td class='field'>
 						<input type='text' class='text urlfield' name="pickerUrl" id="pickerUrl" value="" /><br />
-						<input type='hidden' name="type" id="type" value="" /><br />
-						<input type='hidden' name="node" id="node" value="" /><br />
-						<input type='hidden' name="fullUrl" id="fullUrl" value="" /><br />
+						<input type='hidden' name="type" id="type" value="" />
+						<input type='hidden' name="g3client" id="g3client" value="" />
+						<input type='hidden' name="node" id="node" value="" />
+						<input type='hidden' name="fullUrl" id="fullUrl" value="" />
 						<button type='button' id="urlButtonEmpty" class='button urlnone' onclick="buttonToField(this,'pickerUrl');" title="">None</button>
 						<button type='button' id="urlButtonGallery" class='button urlfile' onclick="buttonToField(this,'pickerUrl');" title="">Gallery page</button>
 						<button type='button' id="urlButtonPost" class='button urlpost' onclick="buttonToField(this,'pickerUrl');" title="$permaLink">Post URL</button>
 						<p class='help'>Enter a link URL or click above for presets.</p>
 					</td>
 				</tr>
-				<tr class='align pickerCanEmbed' style="display: none;">
+				<tr class='align pickerCanEmbed2' style="display: none;">
 					<th valign='top' scope='row' class='label'>
 						<label for='align'>
 							<span class='alignleft'>Alignment</span><br class='clear' />
@@ -174,7 +180,7 @@ echo <<<EOT
 						<input type='radio' name='align' id='image-align-right' value='alignright' /><label for='image-align-right' class='align image-align-right-label'>Right</label>
 					</td>
 				</tr>
-				<tr class="image-size pickerCanEmbed" style="display: none;">
+				<tr class="image-size pickerCanEmbed2" style="display: none;">
 					<th valign='top' scope='row' class='label'>
 						<label for='align'>
 							<span class='alignleft'>Size</span><br class='clear' />
@@ -342,7 +348,7 @@ EOT;
 			{
 				case 200:
 					$options['gallery3_status'] = 'ok';
-					$options['gallery3_status_message'] = 'Configration OK, mod_rewrite support detected.';
+					$options['gallery3_status_message'] = 'Configuration OK, mod_rewrite support detected.';
 					$options['gallery3_url'] = $url;
 					break;
 					
@@ -371,7 +377,7 @@ EOT;
 			{
 				case 200:
 					$options['gallery3_status'] = 'ok';
-					$options['gallery3_status_message'] = 'Configration OK, no mod_rewrite support.';
+					$options['gallery3_status_message'] = 'Configuration OK, no mod_rewrite support.';
 					$options['gallery3_url'] = $candidate;
 					break;
 				
@@ -521,6 +527,8 @@ EOT;
 			'gallery3_config_url' => 'http://bilder.sverok.se/',
 			'gallery3_name' => 'Bildbank, Sverok',
 			'gallery3_api_key' => '',
+			'gallery3_g3client' => 'on',
+			'gallery3_default_size' => 'resize',
 			'gallery3_maxlength' => 4000
 		);
 		
@@ -530,8 +538,11 @@ EOT;
 			$opts['gallery3_config_url'] = $_POST['gallery3_config_url'];
 			$opts['gallery3_name'] = $_POST['gallery3_name'];
 			$opts['gallery3_api_key'] = $_POST['gallery3_api_key'];
-			
+			$opts['gallery3_g3client'] = array_key_exists('gallery3_g3client',$_POST) ? 'on' : 'off';
+			$opts['gallery3_default_size'] = $_POST['gallery3_default_size'];
+
 			if ($opts['gallery3_name'] == '') { $opts['gallery3_name'] = 'Gallery 3'; }
+
 			update_option('gallery3_picker_options', $opts);
 			
 			gallery3Picker::gallery3_connection_test();
@@ -545,6 +556,11 @@ EOT;
 		{
 			$optionarray_def['gallery3_config_url'] = $optionarray_def['gallery3_url'];
 		}
+
+		if (!array_key_exists('gallery3_g3client',$optionarray_def))
+			$optionarray_def['gallery3_g3client'] = 'off'; 
+		if (!array_key_exists('gallery3_default_size',$optionarray_def))
+			$optionarray_def['gallery3_default_size'] = 'resize'; 
 	
 		?>
 		<div class="wrap">
@@ -582,6 +598,19 @@ EOT;
 			<tr valign="center"> 
 				<td width="300px" scope="row"><?php _e( 'API key (if any)' ) ?></td> 
 				<td><input type="text" name="gallery3_api_key" id="gallery3_api_key_inp" value="<?php echo $optionarray_def['gallery3_api_key']; ?>" size="50" /></td>
+			</tr>
+			<tr valign="center"> 
+				<td width="300px" scope="row"><?php _e( 'Default size for photos' ) ?></td> 
+				<td>
+					<input type="radio" name="gallery3_default_size" id="size_thumb" value="thumb" <?php if($optionarray_def['gallery3_default_size']=='thumb') echo ' checked '; ?> /> <label for='size_thumb'>Thumbnail</label> &nbsp;
+					<input type="radio" name="gallery3_default_size" id="size_resize" value="resize" <?php if($optionarray_def['gallery3_default_size']=='resize') echo ' checked '; ?> /> <label for='size_resize'>Resize</label> &nbsp;
+					<input type="radio" name="gallery3_default_size" id="size_full" value="full" <?php if($optionarray_def['gallery3_default_size']=='full') echo ' checked '; ?> /> <label for='size_full'>Full</label> &nbsp;
+                </td>
+
+			</tr>
+			<tr valign="center"> 
+				<td width="300px" scope="row"><?php _e( 'Use [g3client] shortcodes' ) ?></td> 
+				<td><input type="checkbox" name="gallery3_g3client" id="gallery3_short_inp" <?php if($optionarray_def['gallery3_g3client']=='on') echo 'checked'; ?> /> <label for='gallery3_short_inp'><?php _e( 'Embed images as [g3client] shortcodes' ) ?></label></td>
 			</tr>
 		</table>
 			<div class="submit">

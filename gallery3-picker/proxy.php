@@ -110,10 +110,12 @@ class gallery3Proxy {
 		$return['sizeList'] = $sizes;
 
 		if ( $ent->{'type'} == 'album' ) {
-            //$return['url'] = $ent->{'web_url'};
-            // TODO insert g3client stuff?
-            //$return['url'] = '/photo?&item=' . $node;
-            $return['url'] = '/photo?&item=' . $node;
+			if ( $options['gallery3_g3client'] == 'on' ) {
+				$return['url'] = '/photo?&item=' . $node;
+			}
+			else {
+				$return['url'] = $ent->{'web_url'};
+			}
         }
         else {
         $return['url'] = $ent->{'web_url'};
@@ -130,9 +132,16 @@ class gallery3Proxy {
 		if ($size == '') { $return['size'] = ''; }
 		else if ($size < 1024) { $return['size'] = $size . ' Bytes'; }
 		else if ($size < 1048576) { $return['size'] = round( $size / 1024, 2) . ' KB'; }
-		else { $sizeStr = round( $return['size'] / 1048576, 2) . ' MB'; }
+		else { $return['size'] = round( $size / 1048576, 2) . ' MB'; }
         }
-		
+
+		// parse any options so they are available later
+		$options = get_option('gallery3_picker_options');
+		$options['gallery3_api_key'] = '';
+		$return['options'] = array();
+		$return['options']['gallery3_g3client'] = $options['gallery3_g3client'];
+		$return['options']['gallery3_default_size'] = $options['gallery3_default_size'];
+
 		return $return;
 	}
 	

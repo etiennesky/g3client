@@ -42,34 +42,36 @@ function selectFolder(id)
 
 function updateImageMeta(data)
 {
-    //alert(JSON.stringify(data));
+    //console.log(JSON.stringify(data));
 	jQuery('#pickerThumbContainer').append('<img src="' + data.thumbnail.url + '" style="width: ' + 
 		data.thumbnail.width + 'px; height: ' + data.thumbnail.height + 'px;" />');
-	jQuery('#pickerTitle').text(data.title);
-	jQuery('#pickerFilename').text(data.filename);
-	jQuery('#pickerSize').text(data.size);
+	jQuery('#pickerTitle').text('Title: '+data.title);
+	if(data.filename!=null) jQuery('#pickerFilename').text('File: '+data.filename);
+	jQuery('#pickerSize').text('Size: '+data.size);
 	
 	var publicSizes = 0;
 	var importSizeDropdown;
+
 	for (var item in data.sizeList)
 	{
 		var size = data.sizeList[item];
 		
-		
 		var checked = '';
 		if (publicSizes == 0) { checked = ' checked="checked"'; }
+		if (data.options['gallery3_default_size'] == size.value) { checked = ' checked="checked"'; }
 		if (size.public == true) { publicSizes++; }
 		else { continue; }
 		
-		var value = size.width + '|' + size.height + '|' + size.url;
+		var value = size.width + '|' + size.height + '|' + size.url + '|' + size.value;
 		var html = '<div class="image-size-item"><input type="radio" value="' + value + '" name="image-size" id="image-size-' + item + '"' + checked + '>';
-		html += '<label for="image-size-' + item + '">' + size.name + '</label><br/>';
+		html += '<label for="image-size-' + item + '">' + size.name + '</label> &nbsp;'; //<br/>
 		html += '<label for="image-size-' + item + '" class="help">(' + size.width + ' x ' + size.height + ')</label>';
-		html += '</div>';		
+		html += '</div>';
 		jQuery('#pickerSizeContainer').append(html);
-	}	
+	}
 	
 	jQuery('#type').val(data.type);
+	jQuery('#g3client').val(data.options['gallery3_g3client']=='on');
 	jQuery('#node').val(data.node);
 	jQuery('#pickerUrl').val(data.url);
 	jQuery('#fullUrl').val(data.fullUrl);
@@ -85,9 +87,13 @@ function updateImageMeta(data)
 	}
 	else
 	{
-		jQuery('tr.pickerCanEmbed').fadeIn(200);
-		jQuery('span.pickerCanEmbed').fadeIn(200);
 		jQuery('#pickerStatus').html("This image is accessible from the Internet.");	
+		jQuery('tr.pickerCanEmbed2').fadeIn(200);
+		jQuery('span.pickerCanEmbed2').fadeIn(200);
+		if(data.options['gallery3_g3client']!='on') {
+			jQuery('tr.pickerCanEmbed').fadeIn(200);
+			jQuery('span.pickerCanEmbed').fadeIn(200);
+		}
 	}
 }
 
@@ -111,11 +117,10 @@ function attr_safe(inputText)
 
 function generateHtml()
 {
-    var type = jQuery('input[name=type]').val();
-    if (  type != undefined && type == "album" )
-        return generateAlbumHtml();
-    else
-        return generateImageHtml();
+	if ( jQuery('#g3client').val()=="true" )
+		return generateG3ClientHtml();
+	else
+		return generateImageHtml();
 }
 
 function generateImageHtml()
@@ -123,7 +128,7 @@ function generateImageHtml()
 	var html = '';
 	
 	var imageValue = jQuery('input:radio[name=image-size]:checked').val();
-	var img = imageValue.split('|', 3);
+	var img = imageValue.split('|', 4);
 	var link = attr_safe(jQuery('input[name=pickerUrl]').val());
 	var fullUrl = attr_safe(jQuery('input[name=fullUrl]').val());
 	
@@ -133,6 +138,7 @@ function generateImageHtml()
 	if (caption != '') { html += '[caption align="' + align + '" width="' + attr_safe(img[0]) + '" caption="' + caption + '"]'; }
 	if (link != '') 
     { 
+		//TODO remove old g3client stuff?
         html += '<a href="' + link + '" '; 
 	    html += 'class="g3client_image" ';
 	    html += 'rel="group-g3picker" ';
@@ -142,9 +148,6 @@ function generateImageHtml()
     }
 	html += '<img src="' + attr_safe(img[2]) + '" ';
 	html += 'class="';
-	console.log(caption+" / "+align);
-	console.log(JSON.stringify(jQuery('input:radio[name=align]')));
-	//console.log(jQuery('input:radio[name=align]:checked').val());
 	if (caption == '') { html += align; }
 	html += '" ';
 	html += 'width="' + attr_safe(img[0]) + '" height="' + attr_safe(img[1]) + '" ';
@@ -152,17 +155,24 @@ function generateImageHtml()
 	if (link != '') { html += '</a>'; }
 	if (caption != '') { html += '[/caption]'; }
 
-	// TMP
-	//html = '[g3client item=' + jQuery('input[name=node]').val() + ']';
-
 	parent.send_to_editor(html);	
 }
 
-function generateAlbumHtml()
+function generateG3ClientHtml()
 {
-	var html = '';
-	
-    html += '[g3client item=' + jQuery('input[name=node]').val() + ']';
+	var isAlbum = jQuery('#type').val() == "album";
+
+	var html = '[g3client item=' + jQuery('input[name=node]').val();
+
+	var align = jQuery('input:radio[name=align]:checked').val();
+	if (align != '' && align!='alignnone') html += ' class="' + align + '"';
+
+	if ( !isAlbum ) {
+		var singlesize = jQuery('input:radio[name=image-size]:checked').val().split('|', 4)[3];
+		html += ' singlesize="' + singlesize + '"';
+	}
+
+	html += ']';
 
 	parent.send_to_editor(html);	
 }
