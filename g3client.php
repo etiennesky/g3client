@@ -31,7 +31,7 @@ License: MIT
 
 include_once(dirname(__FILE__) . '/g3client_Admin.php');
 include_once(dirname(__FILE__) . '/g3client_Shortcode.php');
-include_once(dirname(__FILE__) . '/widgets/g3client_RandomPhotoWidget.php');
+include_once(dirname(__FILE__) . '/g3client_RandomPhotoWidget.php');
 include_once(dirname(__FILE__) . '/gallery3-picker/picker.php');
 
 define('G3_SETTINGS_APIURL', 'g3_restapiurl');

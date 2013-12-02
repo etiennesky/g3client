@@ -22,7 +22,6 @@ THE SOFTWARE.
 */
 
 include_once(dirname(__FILE__) . '/g3client_Output.php');
-include_once(dirname(__FILE__) . '/g3client_OutputUtil.php');
 
 /** html output */
 class G3Client_HTMLOutput extends G3Client_Output {
@@ -38,7 +37,7 @@ class G3Client_HTMLOutput extends G3Client_Output {
 			return $this->getErrorMessage($toShow);
 
 		//$result = '<div class="g3client_wrapper">';
-		$result = '<div class="g3client_wrapper ' . $this->getOption(G3_SETTINGS_ITEM_CLASS, '') . '" style="border:1px solid black" >';
+		$result = '<div class="g3client_wrapper ' . $this->getOption(G3_SETTINGS_ITEM_CLASS, '') . '" >';
 
 		$result .= $this->generateBreadcrumb($toShow);
 
@@ -128,7 +127,8 @@ class G3Client_HTMLOutput extends G3Client_Output {
 	private function generateSingleView($item) {
 		$result = '<div class="g3client_singleview">';
 
-		// TODO add g3client_image class for lightbox and fix span (that has a border now for debug)
+		// TODO add g3client_image class for lightbox 
+		// and add a g3client_wrapper_single class to fix span
 		//$result .= '<img src="' . $item['imgurl']  . '" alt="">';
 		if($this->getOption(G3_SETTINGS_SINGLESIZE) == 'thumb')
 			$result .= '<img src="' . $item['thumb']  . '" alt="" title="' . $item['title'] . '">';

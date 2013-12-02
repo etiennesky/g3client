@@ -20,8 +20,8 @@
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
    THE SOFTWARE.
 */
-include_once(dirname(__FILE__) . '/../client.php');
-include_once(dirname(__FILE__) . '/../output/g3client_Output.php');
+include_once(dirname(__FILE__) . '/client.php');
+include_once(dirname(__FILE__) . '/g3client_Output.php');
 
 class G3Client_RandomPhotoWidget extends WP_Widget {
 

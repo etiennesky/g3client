@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-include_once(dirname(__FILE__) . '/output/g3client_HTMLOutput.php');
+include_once(dirname(__FILE__) . '/g3client_HTMLOutput.php');
 
 add_shortcode('g3client', 'G3Client_Shortcode_Handler');
 
