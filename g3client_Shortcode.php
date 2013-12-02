@@ -35,7 +35,7 @@ function G3Client_Shortcode_Handler($atts) {
 	$breadcrumbAlbumDefault = get_option(G3_SETTINGS_SHOWBREADCRUMB_ALBUM, 'on');
 	$breadcrumbPhotoDefault = get_option(G3_SETTINGS_SHOWBREADCRUMB_PHOTO, 'on');
 	$thumbtitlesDefault = get_option(G3_SETTINGS_SHOWTHUMBTITLES, 'off');
-	$singletitlesDefault = get_option(G3_SETTINGS_SHOWTHUMBTITLES, 'off');
+	$singletitlesDefault = get_option(G3_SETTINGS_SHOWSINGLETITLES, 'off');
 	$lightboxDefault = get_option(G3_SETTINGS_USELIGHTBOX, 'on');
 	$albumHeading = get_option(G3_SETTINGS_SHOWALBUMHEADING, 'on');
 	$photoHeading = get_option(G3_SETTINGS_SHOWPHOTOHEADING, 'on');

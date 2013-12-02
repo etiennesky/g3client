@@ -124,7 +124,7 @@ class G3Client_HTMLOutput extends G3Client_Output {
 		return $result;
 	}
 
-	private function generateSingleView($item) {
+	private function generateSingleView1($item) {
 		$result = '<div class="g3client_singleview">';
 
 		// TODO add g3client_image class for lightbox 
@@ -147,6 +147,54 @@ class G3Client_HTMLOutput extends G3Client_Output {
 		return $result;
 	}
 
+	// TODO add a g3client_wrapper_single class to fix span
+	private function generateSingleView($curItem) {
+		$result = '<div class="g3client_singleview">';
+
+		// previous code was just <img> without <a>
+		//$result .= '<img src="' . $item['imgurl']  . '" alt="">';
+
+		$slug = !empty($curItem['slug']) ? $curItem['slug'] : $curItem['title'];
+
+		// <a>
+		if($this->getOption(G3_SETTINGS_USELIGHTBOX) && isset($curItem['imgurl'])) {
+			$result .= '<a href="' . $curItem['imgurl'] . '" title="' . $curItem['title'] . '"';
+			$result .= ' class="' . $this->getHrefCSS(array('g3client_image')) . '"';
+			$rel = 'post';
+			if(!empty($rel)) $result .= ' rel="' . $rel . '"';
+            if( $curItem['imgurl'] != $curItem['full_imgurl'] && 
+                $curItem['img_height'] != $curItem['full_img_height'] &&
+                $curItem['img_width'] != $curItem['full_img_width'] )
+                $result .= ' data-fullimg-href="' .$curItem['full_imgurl']. '"';
+			$result .= '>';
+		} else {// TODO fix URL when not using lightbox script
+			$result .= '<a href="' . G3Client_Output::genURL(array('item' => $curItem['id']))  . '" title="' . $slug . '">';
+		}
+
+		// <img>
+		if($this->getOption(G3_SETTINGS_SINGLESIZE) == 'thumb')
+			$img = $curItem['thumb'];
+		else if($this->getOption(G3_SETTINGS_SINGLESIZE) == 'full')
+			$img = $curItem['full_imgurl'];
+		else
+			$img = $curItem['imgurl'];
+		$result .= '<img src="' . $img . '" alt="' . $slug . '">';
+
+		$result .= '</a>';
+
+		// title + slug
+		echo "showtitles: ".$this->getOption(G3_SETTINGS_SHOWSINGLETITLES);
+ 		if($this->getOption(G3_SETTINGS_SHOWSINGLETITLES))
+		  $result .= '<p class="g3client_singletitle">' . $curItem['title'] . '</p>';
+		if($this->getOption(G3_SETTINGS_SHOWSLUGINSINGLEVIEW) && !empty($curItem['slug']) &&
+		    strcmp($curItem['slug'], $curItem['title']) != 0)
+		        $result .= '<p class="g3client_singleslug">' . $curItem['slug']  .'</p>';
+
+		$result .= '</div>';
+
+		return $result;
+	}
+
 	private function getThumbImg($curItem, $rel = '') {
 		$slug = !empty($curItem['slug']) ? $curItem['slug'] : $curItem['title'];
 
@@ -162,7 +210,7 @@ class G3Client_HTMLOutput extends G3Client_Output {
                 $result .= ' data-fullimg-href="' .$curItem['full_imgurl']. '"';
 			$result .= '>';
 		} else {
-			$result .= '<a href="' . G3Client_OutputUtil::genURL(array('item' => $curItem['id']))  . '" title="' . $slug . '">';
+			$result .= '<a href="' . G3Client_Output::genURL(array('item' => $curItem['id']))  . '" title="' . $slug . '">';
 		}
 
 		$result .= '<img src="' . $curItem['thumb'] . '" alt="' . $slug . '">';
