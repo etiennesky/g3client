@@ -80,7 +80,7 @@ abstract class G3Client_Output {
         foreach(array_reverse($curItem['parents']) as $curParent) {
             $result .= '<span>';
             $result .= '<a href="';
-            $result .= G3Client_OutputUtil::genURL(array('item' => $curParent['id']));
+            $result .= G3Client_Output::genURL(array('item' => $curParent['id']));
             $result .= '" title="';
             $result .= !empty($curParent['slug']) ? $curParent['slug'] : $curParent['title'];
             $result .= '">';
@@ -160,6 +160,74 @@ abstract class G3Client_Output {
 
         return $result;
     }
+
+    /**
+     * Generates a url to the current page with a given set of GET parameters
+     *
+     * @param params the parameters to be appended to the url
+     * @return the url of to the current page with the given GET paramters
+     */
+	public static function genURL($params = array()) {
+		global $_SERVER;
+
+		$baseURL = isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+		$baseURL .= $_SERVER['SERVER_NAME'] .
+			($_SERVER['SERVER_PORT'] != '80' ? $_SERVER['SERVER_PORT'] : '') .
+			$_SERVER['REQUEST_URI'];
+
+	    $urlData = parse_url($baseURL);
+	    $args = array();
+
+	    foreach(explode('&', $urlData['query']) as $curArg) {
+	        $argData = explode('=', $curArg);
+	        $args[$argData[0]] = isset($argData[1]) ? $argData[1] : '';
+	    }
+
+		if(!empty($params)) {
+		    $args = array_merge($args, $params);
+
+		    $newArgs = '';
+		    foreach($args as $key => $value) {
+		        $newArgs.= $key . '=' . urlencode($value) . '&';
+		    }
+
+		    $urlData['query'] = rtrim($newArgs, '&');
+		}
+
+	    return G3Client_Output::glueURL($urlData);
+
+	}
+
+    // thx to ilja at radusch dot com, seen @ http://php.net/manual/de/function.parse-url.php
+    private static function glueURL($parsed) {
+        if (!is_array($parsed)) return false;
+
+        $uri = isset($parsed['scheme']) ? $parsed['scheme'].':'.((strtolower($parsed['scheme']) == 'mailto') ? '' : '//') : '';
+        $uri .= isset($parsed['user']) ? $parsed['user'].(isset($parsed['pass']) ? ':'.$parsed['pass'] : '').'@' : '';
+        $uri .= isset($parsed['host']) ? $parsed['host'] : '';
+        $uri .= isset($parsed['port']) ? ':'.$parsed['port'] : '';
+
+        if (isset($parsed['path'])) {
+            $uri .= (substr($parsed['path'], 0, 1) == '/') ?
+            $parsed['path'] : ((!empty($uri) ? '/' : '' ) . $parsed['path']);
+        }
+
+        $uri .= isset($parsed['query']) ? '?' . $parsed['query'] : '';
+        $uri .= isset($parsed['fragment']) ? '#'.$parsed['fragment'] : '';
+
+        return $uri;
+    }
+
+    /**
+     * Parses a given value into a boolean value
+     *
+     * @param val the value to parse
+     * @return the boolean value of the given value
+     */
+    public static function parseBoolean($val) {
+        return filter_var($val, FILTER_VALIDATE_BOOLEAN);
+    }
+
 }
 
 ?>
