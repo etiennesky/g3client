@@ -77,15 +77,15 @@ function G3Client_AdminPage() {
 		</td>
 	</tr>
 	<tr valign="top">
-		<th scope="row"><?php _e('Thumbnail titles', 'g3client') ?></th>
+		<th scope="row"><?php _e('Show title for thumbnails', 'g3client') ?></th>
 		<td>
-			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWTHUMBTITLES ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWTHUMBTITLES)) ?>/> <?php _e('Show titles for thumbnails.', 'g3client') ?></label>
+			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWTHUMBTITLES ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWTHUMBTITLES)) ?>/> <?php _e('Show title for thumbnails.', 'g3client') ?></label>
 		</td>
 	</tr>
 	<tr valign="top">
-		<th scope="row"><?php _e('Single photo titles', 'g3client') ?></th>
+		<th scope="row"><?php _e('Show title for single photos', 'g3client') ?></th>
 		<td>
-			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWSINGLETITLES ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWSINGLETITLES)) ?>/> <?php _e('Show titles for single photos.', 'g3client') ?></label>
+			<label><input type="checkbox" name="<?php echo G3_SETTINGS_SHOWSINGLETITLES ?>" <?php checked('on', get_option(G3_SETTINGS_SHOWSINGLETITLES)) ?>/> <?php _e('Show title for single photos.', 'g3client') ?></label>
 		</td>
 	</tr>
 	<tr valign="top">

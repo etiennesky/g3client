@@ -183,7 +183,6 @@ class G3Client_HTMLOutput extends G3Client_Output {
 		$result .= '</a>';
 
 		// title + slug
-		echo "showtitles: ".$this->getOption(G3_SETTINGS_SHOWSINGLETITLES);
  		if($this->getOption(G3_SETTINGS_SHOWSINGLETITLES))
 		  $result .= '<p class="g3client_singletitle">' . $curItem['title'] . '</p>';
 		if($this->getOption(G3_SETTINGS_SHOWSLUGINSINGLEVIEW) && !empty($curItem['slug']) &&
