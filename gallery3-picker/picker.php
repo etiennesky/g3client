@@ -290,8 +290,8 @@ EOT;
 		</div>
         <br><br><br>
 		<div id="media-items" style="float:left; border:0px solid;">
-			<div class="media-item media-blank" id="gallery3_picker_preview" style="height: 500px;">
-				<div id="preview" style="height: 500px; overflow: auto;"><table><tr><td>No pictures in this folder</td></tr></table></div>
+			<div class="media-item media-blank" id="gallery3_picker_preview" style="height: 650px;">
+				<div id="preview" style="height: 650px; width: 650px; overflow: auto;"><table><tr><td>No pictures in this folder</td></tr></table></div>
 			</div>
 		</div>	
 		<?
