@@ -274,15 +274,16 @@ EOT;
 		<?php wp_nonce_field('media-form'); ?>
 			
 		<h3 class="media-title"><?php _e('Add media files from '); ?><?php echo $options['gallery3_name']; ?></h3>
+        <div style="float:left; border:0px solid;">
 		<div id="gallery3_picker_tree" style="margin-right: 20px;">
 				<ul>
 					<li id="g3pt_0"><span id="gallery3_picker_tree_base">Loading...</span></li>
 				</ul>
 		</div>
-        <div>
-          <input type="button" value="Add Album" onClick="javascript:fetchAlbum();" />
-		</div>
-		<div id="media-items">
+        <br>
+        <input type="button" value="Add Album" onClick="javascript:fetchAlbum();" />
+        </div>
+		<div id="media-items" style="float:left; border:0px solid;">
 			<div class="media-item media-blank" id="gallery3_picker_preview" style="height: 500px;">
 				<div id="preview" style="height: 500px; overflow: auto;"><table><tr><td>No pictures in this folder</td></tr></table></div>
 			</div>
