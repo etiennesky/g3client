@@ -57,8 +57,7 @@ class G3Client {
 	}
 
 
-	private function request($resource, $isURL = false) {
-
+	private function request($resource, $isURL = false, $useCache = true) {
         if(is_array($resource)) {
             $items = $resource;
             $req = $this->baseURL . "items?urls=[%22" . implode("%22,%22",$items) . "%22]";
@@ -74,14 +73,16 @@ class G3Client {
 	return $ret;
         }
  
-		if(isset($this->requestCache[$req])) return $this->requestCache[$req];
+	if($useCache && isset($this->requestCache[$req])) return $this->requestCache[$req];
 
-		$res = ($this->useHTTPReq2) ? $this->requestHTTP2($req) : $this->requestCURL($req);
+	//echo $req."<br>";
+
+	$res = ($this->useHTTPReq2) ? $this->requestHTTP2($req,$useCache) : $this->requestCURL($req,$useCache);
 
 		return $res;
 	}
 
-	private function requestCURL($resource) {
+	private function requestCURL($resource,$useCache=true) {
 		$con = curl_init();
 		curl_setopt($con, CURLOPT_USERAGENT, G3Client::$USER_AGENT);
 		curl_setopt($con, CURLOPT_URL, $resource);
@@ -103,7 +104,7 @@ class G3Client {
 
 		if($response['http_code'] == 200) {
 			$result = json_decode($content);
-			$this->requestCache[$resource] = $result;
+			if($useCache) $this->requestCache[$resource] = $result;
 		} else {
 			$http_codes = parse_ini_file(dirname(__FILE__) . '/http_codes.ini');
 
@@ -117,7 +118,7 @@ class G3Client {
 		return $result;
 	}
 
-	private function requestHTTP2($resource) {
+	private function requestHTTP2($resource,$useCache=true) {
 
 		$request = new HTTP_Request2($resource, HTTP_Request2::METHOD_GET, array(
 			'follow_redirects' => true,
@@ -136,7 +137,7 @@ class G3Client {
 
 			if ($response->getStatus() == 200) {
 				$result = json_decode($response->getBody());
-				$this->requestCache[$resource] = $result;
+				if($useCache) $this->requestCache[$resource] = $result;
 			} else {
 				$result = array(
 					'failure' => true,
@@ -192,9 +193,14 @@ class G3Client {
      * @param scope the scope of the query (all|direct)
      * @return a random photo or false, if the request fails
      */
-    public function getRandomPhoto($parentId = 1, $scope = 'all') {
-        $data = $this->request('item/' . $parentId . '?scope=' . $scope . '&random=true&type=photo');
+    public function getRandomPhoto($parentId = 1, $scope = 'all', $count=0) {
+        $data = $this->request('item/' . $parentId . '?scope=' . $scope . '&random=true&type=photo', false, false);
+
         if(!is_array($data)) {
+			// work around stupid random generator bug when gallery has few items
+			// let's be leenient and try 5 times, 2 should be enough
+			if($count<5 && (!isset($data->members) || count($data->members)==0 ) )
+				return $this->getRandomPhoto($parentId, $scope, $count+1);
             $result = $this->extractMembers($data);
             $result = $this->toRandomPhoto($result);
         }
