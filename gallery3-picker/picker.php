@@ -37,9 +37,11 @@ class gallery3Picker {
 	{
 		$options = get_option('gallery3_picker_options');
 		$plugin_url = get_settings('siteurl').'/wp-content/plugins/'.dirname(plugin_basename(__FILE__));
+        /*
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery.jstree.strip.min', $plugin_url . '/jquery.jstree.min.js');
+        */
 		wp_enqueue_script('gallery3_picker', $plugin_url . '/gallery.js');
 		
 		
@@ -275,14 +277,18 @@ EOT;
 			
 		<h3 class="media-title"><?php _e('Add media files from '); ?><?php echo $options['gallery3_name']; ?></h3>
         <div style="float:left; border:0px solid;">
+<!--
 		<div id="gallery3_picker_tree" style="margin-right: 20px;">
 				<ul>
 					<li id="g3pt_0"><span id="gallery3_picker_tree_base">Loading...</span></li>
 				</ul>
-		</div>
-        <br>
+-->
+		<select id="gallery3_picker_select" style="width:100px"; 
+          onChange="javascript: var sel=document.getElementById('gallery3_picker_select'); selectFolder(sel.options[sel.selectedIndex].value); ">
+		</select>&nbsp;&nbsp;
         <input type="button" value="Add Album" onClick="javascript:fetchAlbum();" />
-        </div>
+		</div>
+        <br><br><br>
 		<div id="media-items" style="float:left; border:0px solid;">
 			<div class="media-item media-blank" id="gallery3_picker_preview" style="height: 500px;">
 				<div id="preview" style="height: 500px; overflow: auto;"><table><tr><td>No pictures in this folder</td></tr></table></div>
@@ -297,9 +303,7 @@ EOT;
 		$tabs['gallery3_picker'] = $options['gallery3_name'];
 		return $tabs;
 	}
-	
-	
-	
+		
 	
 /*
 

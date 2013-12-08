@@ -7,6 +7,7 @@ jQuery(document).ready(function(){
 	var g3p_data;
 	var g3p_node;
 	
+/*
 	jQuery('#gallery3_picker_tree').jstree({
 		'json_data' : {
 			'ajax': {
@@ -29,7 +30,29 @@ jQuery(document).ready(function(){
 		var id = data.rslt.obj.attr('id').substr(5);
 		selectFolder(id);
 	});		
+*/
+
+	jQuery.getJSON(ajaxurl, {what: 'tree',  action: 'gallery3proxy'}, function(data) {
+        addSelectChildren(data);
+        selectFolder(1);
+	});
+
 });
+
+function addSelectChildren(data,count=0)
+{
+	for (var item in data) {
+        var html = '<option value="' + data[item].attr['id'].substring(5) + '">';
+        for(i=0;i<count;i++) html += '&nbsp;&nbsp;';
+        html += data[item].data;
+        html +='</option>';
+        jQuery("select#gallery3_picker_select").append(html);
+	    for (var child in data[item].children) {
+            addSelectChildren(data[item].children[child],count+1);
+        }
+    }
+
+}
 
 function selectFolder(id)
 {
