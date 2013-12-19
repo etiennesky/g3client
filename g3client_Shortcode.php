@@ -43,7 +43,7 @@ function G3Client_Shortcode_Handler($atts) {
 	$singleSizeDefault = get_option(G3_SETTINGS_SINGLESIZE, 'resize');
 	$class = ''; // TODO add default class value?
 
-	if( array_key_exists( 'breadcrumb', $atts ) ) {
+	if( isset($atts) && is_array($atts) && array_key_exists( 'breadcrumb', $atts ) ) {
 		$atts[ 'breadcrumbAlbum' ] = $atts[ 'breadcrumb' ];
 		$atts[ 'breadcrumbPhoto' ] = $atts[ 'breadcrumb' ];
 	}

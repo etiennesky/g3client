@@ -84,7 +84,8 @@ if(is_admin()){
 function G3Client_AdminSettingsWarning(){
     $warning = '<div id="akismet-warning" class="updated fade"><p><strong>';
     $warning .= __('G3Client is almost ready.', 'g3client') . '</strong> ';
-    $warning .= sprintf(__('You must <a href="%1$s">specify the Gallery3 API Settings</a> for it to work.'), 'options-general.php?page=' . plugin_basename(__FILE__));
+    //$warning .= sprintf(__('You must <a href="%1$s">specify the Gallery3 API Settings</a> for it to work.'), 'options-general.php?page=' . plugin_basename(__FILE__));
+    $warning .= sprintf(__('You must <a href="%1$s">specify the Gallery3 API Settings</a> for it to work.'), 'options-general.php?page=g3client');
     $warning .= '</p></div>';
 
     echo $warning;
