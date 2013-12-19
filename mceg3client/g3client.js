@@ -1,5 +1,6 @@
 // based on wpgallery js script
 
+// TODO remove this function, creates problems with other scripts...
 if (!Array.prototype.remove)
 {
     /**

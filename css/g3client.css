@@ -109,3 +109,22 @@ THE SOFTWARE.
 
 .g3client_widget_randomphoto_container {
 }
+
+.g3client-fancybox-skin { display:table; }
+
+.fancybox-sidebar {
+    display:table-cell;
+    vertical-align: middle;
+    background-color:white;
+
+    //border: 1px solid black;
+    //min-width:300px;
+    margin:20px;
+    padding:20px;
+}
+
+.g3client_social_button {
+	float:left;
+	padding:4px;
+	line-height: 0px;
+}

@@ -75,7 +75,7 @@ if(is_admin()){
 
     if ( get_user_option('rich_editing') == 'true') {
         add_filter("mce_external_plugins", "G3Client_tinymce_plugin");		
-        //Applying the filter if you're using the rich text editor
+        //Applying the filter if ou're using the rich text editor
 		add_action( 'admin_enqueue_scripts', 'G3Client_print_config' );
      }
 }
@@ -161,7 +161,7 @@ function G3Client_Init() {
     wp_enqueue_style('fancybox-buttons', plugins_url('fancybox/source/helpers/jquery.fancybox-buttons.css', __FILE__));
     wp_enqueue_script('jquery-thumbs', plugins_url('fancybox/source/helpers/jquery.fancybox-thumbs.js', __FILE__), array('jquery'));
     wp_enqueue_style('fancybox-thumbs', plugins_url('fancybox/source/helpers/jquery.fancybox-thumbs.css', __FILE__));
-    wp_enqueue_script('g3client-initfancybox', plugins_url('init.fancybox.js', __FILE__), array('jquery', 'jquery-fancybox'), '1.0', true);
+    wp_enqueue_script('g3client-fancybox', plugins_url('init.fancybox.js', __FILE__), array('jquery', 'jquery-fancybox'), '1.0', true);
 
     // user css
 	$userCSS = get_option(G3_SETTINGS_USERCSSFILE, '');
