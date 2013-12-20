@@ -168,13 +168,13 @@ function G3Client_Init() {
     wp_enqueue_script('jquery-fullscreen', plugins_url('fancybox/lib/jquery.fullscreen-1.1.5.min.js', __FILE__), array('jquery'));
 	wp_enqueue_style('g3client-fancybox', plugins_url('css/g3client-fancybox.css', __FILE__));
 
-	// load default g3client css
-	wp_enqueue_style('g3client', plugins_url('css/g3client.css', __FILE__));
-
     // user css
 	$userCSS = get_option(G3_SETTINGS_USERCSSFILE, '');
-	if(!empty($userCSS)) {
+
+    if(!empty($userCSS)) {
 		wp_enqueue_style('g3client-user', get_bloginfo('stylesheet_directory') . '/' . $userCSS);
+	} else {
+		wp_enqueue_style('g3client', plugins_url('css/g3client.css', __FILE__));
 	}
 }
 
