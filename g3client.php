@@ -158,8 +158,10 @@ function G3Client_Init() {
     //wp_enqueue_script('jquery-ease', plugins_url('fancybox/jquery.easing-1.3.pack.js', __FILE__), array('jquery'));
     wp_enqueue_script('jquery', plugins_url('fancybox/lib/jquery.1.10.1.min.js', __FILE__), array('jquery'));
     wp_enqueue_script('jquery-mousewheel', plugins_url('fancybox/lib/jquery.mousewheel-3.0.6.pack.js', __FILE__), array('jquery'));
-    wp_enqueue_script('jquery-buttons', plugins_url('fancybox/source/helpers/jquery.fancybox-buttons.js', __FILE__), array('jquery'));
+    wp_enqueue_script('fancybox-buttons', plugins_url('fancybox/source/helpers/jquery.fancybox-buttons.js', __FILE__), array('jquery'));
     wp_enqueue_style('fancybox-buttons', plugins_url('fancybox/source/helpers/jquery.fancybox-buttons.css', __FILE__));
+    wp_enqueue_script('fancybox-sidebar', plugins_url('fancybox/source/helpers/jquery.fancybox-sidebar.js', __FILE__), array('jquery'));
+    wp_enqueue_style('fancybox-sidebar', plugins_url('fancybox/source/helpers/jquery.fancybox-sidebar.css', __FILE__));
     wp_enqueue_script('jquery-thumbs', plugins_url('fancybox/source/helpers/jquery.fancybox-thumbs.js', __FILE__), array('jquery'));
     wp_enqueue_style('fancybox-thumbs', plugins_url('fancybox/source/helpers/jquery.fancybox-thumbs.css', __FILE__));
     wp_enqueue_script('g3client-fancybox', plugins_url('init.fancybox.js', __FILE__), array('jquery', 'jquery-fancybox'), '1.0', true);

@@ -2,42 +2,43 @@ jQuery(document).ready(function($) {
 //$(document).ready(function() {
 
 	var sidebar = null;
-	var sidebar_mask = null;
 
 	$('a.g3client_image').fancybox({
 		'hideOnContentClick': true,
 		'transitionIn': 'elastic',
 		'transitionOut': 'fade',
 	    padding: 5,
-		//margin: [ 200, 60, 200, 60 ],
-	    //margin: [ 20, 400, 20, 20],
-        //fullscreenMargin : [ 50, 0, 150, 0 ],
-        fullscreenMargin : [ 20, 900, 20, 20 ],
-        //margin : [ 20, 450, 20, 20 ],
-	    //closeBtn: false,
+		scrolling:'no',
+	    fullscreenMargin: [ 10, 400, 40, 20],
+		leftRatio:0.75,
 		
 	    helpers: {
 			//title: { type : 'inside' },
+			//title: null,
 			//overlay: { css: { 'background' : 'rgba(255,255,255,0.95)' } },
 			overlay: { css: { 'background' : 'rgba(200,200,200,0.95)' } },
 			//buttons: { position: 'top' },
 			buttons: { position: 'top'},
-			thumbs: { width: 100, height: 100 }
+			thumbs: { width: 100, height: 100 },
+            sidebar : {
+                // Wrapper element
+                type: 'overlay', // 'inside', 'outside', 'outer', 'over', 'overlay'
+                position: 'top', // 'bottom'
+				width: 400,
+				contents: 'loading...',
+				masked: true
+            }
+
 	    },
 
-		beforeShow: function() {
-			//console.log('beforeShow');
-			this.showSidebar();
-		},
-
-		showSidebar: function() {
-
-			if ( !this.sidebar == null ) return;
-
+        setSidebarContents: function () {
 			var txt = '';
-			txt += "<div id='fb-root'></div>";		
+			//txt += "<div id='fb-root'></div>";		
 			txt += "<div id='sidebar_contents'>";
 
+			txt += "<h2>Title:  " + ($.fancybox.current.title) + "</h2>";
+
+			txt += "<p>&nbsp;</p>";
 			txt += "<h3>Share:</h3><p>&nbsp;</p><div>";
 			//txt += '<div class="g3client_social_button"><fb:like href="' + this.href + '" send="true" show_faces="false"  layout="box_count" width="50"  ></fb:like></div>';
 			txt += "<div class='g3client_social_button' style='margin-right:10px;'>";
@@ -50,41 +51,31 @@ jQuery(document).ready(function($) {
 			txt += '<div class="g3client_social_button"><a href="http://twitter.com/share" class="twitter-share-button" data-url="' + this.href +'" data-count="none" data-text="Photo" data-via="" ></a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></div>';
 			txt += "</div>";
 
-			txt += "<p>&nbsp;<br>&nbsp;</p>&nbsp;<h3>Comments:</h3><p>&nbsp;</p>";
+			txt += "<p>&nbsp;<br>&nbsp;</p>&nbsp;";
+			txt += "<h3>Comments:</h3><p>&nbsp;</p>";
 			txt += '<div class="fb-comments" data-href="' + this.href + '" data-width="350" data-num-posts="5" data-colorscheme="light"></div>';
 			txt += "</div>";
-			//console.log(txt);
-			
-			//this.sidebar = $("<div/>").addClass('fancybox-sidebar').html(txt);//.hide();
-			this.sidebar = $("<div/>").attr('id','fancybox-sidebar-float').addClass('fancybox-sidebar-float').html(txt);//.hide();
-			this.sidebar_mask = $("<div/>").attr('id','fancybox-sidebar-float-mask').addClass('fancybox-sidebar-float fancybox-sidebar-float-above');
-			$('body').append(this.sidebar);  
-			$('body').append(this.sidebar_mask);  
-			
-			var sidebar_mask = this.sidebar_mask;
-			FB.XFBML.parse(this.sidebar[0], function() { sidebar_mask.hide(); });
-			
+
+			this.sidebar = $.fancybox.helpers.sidebar;
+			this.sidebar.setContents(txt);	
 		},
 
+        beforeShow: function(opts, obj) {
+			this.setSidebarContents();
+		},
 
-	beforeChange: function () {
-		//console.log('beforeChange');
-		this.closeSidebar();
-	},
+		afterShow: function() {
+			var sidebar = this.sidebar;
+			FB.XFBML.parse(sidebar.sidebar_content[0], function() { sidebar.showSidebar(); });
+		},
 
-	beforeClose: function () {
-		//console.log('beforeClose');
-		this.closeSidebar();
-	},
+		beforeChange: function () {
+            this.sidebar.hideSidebar();
+		},
 
-
-	closeSidebar: function() {
-		//console.log('close sidebar');
-		if (this.sidebar) {
-			this.sidebar.remove();
-			this.sidebar_mask.remove();
-		}
-	},
+		afterChange: function () {
+            this.setSidebarContents();
+		},
 
 	});
 

@@ -109,3 +109,9 @@ THE SOFTWARE.
 
 .g3client_widget_randomphoto_container {
 }
+
+.g3client_social_button {
+	float:left;
+	padding:4px;
+	line-height: 0px;
+}

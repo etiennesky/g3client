@@ -1,0 +1,23 @@
+.fancybox-sidebar-block {
+    position: absolute; 
+    //position: relative;
+    //z-index: 99999;
+    z-index: 8011;
+    top: 0;
+    right: 0;
+    background: #f2f2f2;
+    height: 100%;
+    display: block;
+    overflow: auto;
+    overflow-x: hidden;
+    padding:0 5px;
+}
+
+#fancybox-sidebar-content {
+    padding:10px;
+}
+
+.fancybox-sidebar-mask {
+	z-index:8012;
+	background: #f2f2f2 center center no-repeat url('../fancybox_loading.gif');
+}

@@ -1430,6 +1430,7 @@
                 current.margin[0] = Math.max(current.fullscreenMargin[0], current.margin[0] - diff/2);
                 current.margin[2] = Math.max(0, current.margin[2] - diff/2);
             }
+			//for(var i=0;i<4;i++) current.margin[i] = current.fullscreenMargin[i];
             }
 			if (scrollOut && scrolling === 'auto' && height < origHeight && (width + wPadding + scrollOut) < maxWidth_) {
 				width += scrollOut;
