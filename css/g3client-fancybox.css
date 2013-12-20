@@ -1,0 +1,46 @@
+
+.g3client-fancybox-skin { display:table; }
+
+.fancybox-sidebar {
+    display:table-cell;
+    vertical-align: middle;
+    background-color:white;
+
+    //border: 1px solid black;
+    //min-width:300px;
+    margin:20px;
+    padding:20px;
+}
+
+/*
+.fancybox-skin, .fancybox-outer, .fancybox-inner,  .fancybox-image {
+	z-index:8050;
+}
+*/
+
+.fancybox-sidebar-float {
+    //display:table-cell;
+    position:absolute;
+	z-index:8011;
+	right:0px;
+	top:0px;
+	bottom:0px;
+	height:100%;
+    vertical-align: middle;
+    background-color:white;
+
+    //border: 1px solid black;
+    min-width:400px;
+    margin:0px 0px 0px 50px;
+    padding:20px;
+}
+.fancybox-sidebar-float-above {
+z-index:8012;
+background:  white center center no-repeat url('../fancybox/source/fancybox_loading.gif');
+}
+
+.g3client_social_button {
+	float:left;
+	padding:4px;
+	line-height: 0px;
+}
