@@ -34,12 +34,20 @@ jQuery(document).ready(function($) {
         setSidebarContents: function () {
 			var txt = '';
 			//txt += "<div id='fb-root'></div>";		
-			txt += "<div id='sidebar_contents'>";
+			txt += "<div id='sidebar_contents' class='g3client_content'>";
 
-			txt += "<h2>Title:  " + ($.fancybox.current.title) + "</h2>";
+			//txt += "<h1>Title:  " + ($.fancybox.current.title) + "</h2>";
+			txt += "<h2>" + ($.fancybox.current.title) + "</h2>";
+			var fullimg = $.fancybox.current.fullimg
+			if( fullimg != undefined) {
+				//txt += "<p>&nbsp;</p>";
+				txt += "<h4>Full Size: <a href='" + fullimg + "' target='_blank'>" + fullimg.match(/[^\/?#]+(?=$|[?#])/) + "</a></h4>";
+			}
 
-			txt += "<p>&nbsp;</p>";
-			txt += "<h3>Share:</h3><p>&nbsp;</p><div>";
+			txt +="<hr>"
+
+			//txt += "<br><h4>Share:</h4>";
+			txt += "<div>";
 			//txt += '<div class="g3client_social_button"><fb:like href="' + this.href + '" send="true" show_faces="false"  layout="box_count" width="50"  ></fb:like></div>';
 			txt += "<div class='g3client_social_button' style='margin-right:10px;'>";
 			txt += '<div class="fb-like" data-href="' + this.href + '" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>';
@@ -51,8 +59,7 @@ jQuery(document).ready(function($) {
 			txt += '<div class="g3client_social_button"><a href="http://twitter.com/share" class="twitter-share-button" data-url="' + this.href +'" data-count="none" data-text="Photo" data-via="" ></a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></div>';
 			txt += "</div>";
 
-			txt += "<p>&nbsp;<br>&nbsp;</p>&nbsp;";
-			txt += "<h3>Comments:</h3><p>&nbsp;</p>";
+			txt += "<p>&nbsp;</p><h4>Comments:</h4>";
 			txt += '<div class="fb-comments" data-href="' + this.href + '" data-width="350" data-num-posts="5" data-colorscheme="light"></div>';
 			txt += "</div>";
 
