@@ -22,7 +22,7 @@
 		defaults : {
 			skipSingle : false, // disables if gallery contains single image
 			position   : 'top', // 'top' or 'bottom'
-			tpl        : '<div id="fancybox-buttons"><ul><li><a class="btnPrev" title="Previous" href="javascript:;"></a></li><li><a class="btnPlay" title="Start slideshow" href="javascript:;"></a></li><li><a class="btnNext" title="Next" href="javascript:;"></a></li><li><a class="btnToggle" title="Toggle size" href="javascript:;"></a></li><li><a class="btnClose" title="Close" href="javascript:;"></a></li></ul></div>'
+			tpl        : '<div id="fancybox-buttons"><ul><li><a class="btnPrev" title="Previous" href="javascript:;"></a></li><li><a class="btnPlay" title="Start slideshow" href="javascript:;"></a></li><li><a class="btnNext" title="Next" href="javascript:;"></a></li><li><a class="btnToggle" title="Toggle size" href="javascript:;"></a></li><li><a class="btnFull" title="Fullscreen" href="javascript:;"></a></li><li><a class="btnClose" title="Close" href="javascript:;"></a></li></ul></div>'
 		},
 
 		list : null,
@@ -65,7 +65,8 @@
 					next   : this.list.find('.btnNext').click( F.next ),
 					play   : this.list.find('.btnPlay').click( F.play ),
 					toggle : this.list.find('.btnToggle').click( F.toggle ),
-					close  : this.list.find('.btnClose').click( F.close )
+					close  : this.list.find('.btnClose').click( F.close ),
+					full   : this.list.find('.btnFull').click( this.toggleFullScreen )
 				}
 			}
 
@@ -108,6 +109,17 @@
                 // ugly hack for fullimg, should test only for canExpand but this is simpler
 				toggle.addClass('btnDisabled');
 			}
+
+			//fullscreen button
+			if(this.buttons.full != null ) {
+				this.buttons.full.removeClass('btnFull btnFullOn');
+				if ( $(document).fullScreen()!=false ) {
+					this.buttons.full.addClass('btnFullOn');
+				}
+				else {
+					this.buttons.full.addClass('btnFull');
+				}
+			}
 		},
 
 		beforeClose: function () {
@@ -115,9 +127,19 @@
 				this.list.remove();
 			}
 
+			if(this.buttons.full != null ) {
+				$(document).fullScreen(false);
+			}
+
 			this.list    = null;
 			this.buttons = null;
+		},
+
+
+		toggleFullScreen: function () {
+			$(document).toggleFullScreen();
 		}
+
 	};
 
 }(jQuery));
