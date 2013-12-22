@@ -100,26 +100,34 @@ function G3Client_AdminSettingsWarning(){
 
 /** admin menu hooks */
 function G3Client_AdminMenuHook() {
+
+	// add top-level Gallery3 menu
+	$page = add_menu_page('Gallery3', 'Gallery3', 'manage_options', 'Gallery3');
+
+	//hack to add links to Gallery3
+	$url = get_option(G3_SETTINGS_APIURL);
+	$url = str_replace('index.php/rest/', '', $url);
+    global $submenu;
+    $submenu['Gallery3'][] = array('Gallery3', 'manage_options', $url);
+    $submenu['upload.php'][] = array('Gallery3', 'manage_options', $url);
+
+	// add settings to Gallery3 and Settings menus
+	add_submenu_page('Gallery3', __('G3Client Settings', 'g3client'),
+					 __('Gallery3 client settings', 'g3client'), 'manage_options', 'g3client',
+					 'G3Client_AdminPage');
 	add_submenu_page('options-general.php', __('G3Client Settings', 'g3client'),
 					 __('Gallery3 client', 'g3client'), 'manage_options', 'g3client',
 					 'G3Client_AdminPage');
-
     //gallery3Picker::add_gallery3_picker_menu();
 	//add_options_page( __( 'Gallery3 settings' ), __( 'G3client media picker' ), 8, basename(__FILE__), array('gallery3Picker', 'gallery3_picker_options_page'));
-    add_submenu_page('', __( 'Gallery3 settings' ), 
+    add_submenu_page('Gallery3', __( 'Gallery3 settings' ), 
+					 __( 'Gallery3 media picker settings' ), 8, 'picker.php', //'gallery3-picker', 
+					 array('gallery3Picker', 'gallery3_picker_options_page'));
+    add_submenu_page('options-general.php', __( 'Gallery3 settings' ), 
 					 __( 'G3client media picker' ), 8, 'picker.php', //'gallery3-picker', 
 					 array('gallery3Picker', 'gallery3_picker_options_page'));
-
-	//hack to add links to Gallery3 in Media and Settings menus
-    global $submenu;
-	$url = get_option(G3_SETTINGS_APIURL);
-	$url = str_replace('index.php/rest/', '', $url);
-    $submenu['upload.php'][] = array('Gallery3', 'manage_options', $url);
-    $submenu['options-general.php'][] = array('Gallery3', 'manage_options', $url);
-	//echo "<pre>";print_r($submenu);	echo "</pre>";
 }
 
-/** adds plugin action links */
 function G3Client_PluginActionLinks($links) {
     $settingsLink = '<a href="options-general.php?page=' . plugin_basename(__FILE__) . '">' . __('Settings') . '</a>';
 
