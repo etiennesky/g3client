@@ -115,17 +115,17 @@ function G3Client_AdminMenuHook() {
 	add_submenu_page('Gallery3', __('G3Client Settings', 'g3client'),
 					 __('Gallery3 client settings', 'g3client'), 'manage_options', 'g3client',
 					 'G3Client_AdminPage');
-	add_submenu_page('options-general.php', __('G3Client Settings', 'g3client'),
-					 __('Gallery3 client', 'g3client'), 'manage_options', 'g3client',
-					 'G3Client_AdminPage');
+	/* add_submenu_page('options-general.php', __('G3Client Settings', 'g3client'), */
+	/* 				 __('Gallery3 client', 'g3client'), 'manage_options', 'g3client', */
+	/* 				 'G3Client_AdminPage'); */
     //gallery3Picker::add_gallery3_picker_menu();
 	//add_options_page( __( 'Gallery3 settings' ), __( 'G3client media picker' ), 8, basename(__FILE__), array('gallery3Picker', 'gallery3_picker_options_page'));
-    add_submenu_page('Gallery3', __( 'Gallery3 settings' ), 
-					 __( 'Gallery3 media picker settings' ), 8, 'picker.php', //'gallery3-picker', 
+    add_submenu_page('Gallery3', __( 'Gallery3 settings' ),
+					 __( 'Gallery3 media picker settings' ), 8, 'picker.php', //'gallery3-picker',
 					 array('gallery3Picker', 'gallery3_picker_options_page'));
-    add_submenu_page('options-general.php', __( 'Gallery3 settings' ), 
-					 __( 'G3client media picker' ), 8, 'picker.php', //'gallery3-picker', 
-					 array('gallery3Picker', 'gallery3_picker_options_page'));
+    /* add_submenu_page('options-general.php', __( 'Gallery3 settings' ),  */
+	/* 				 __( 'G3client media picker' ), 8, 'picker.php', //'gallery3-picker',  */
+	/* 				 array('gallery3Picker', 'gallery3_picker_options_page')); */
 }
 
 function G3Client_PluginActionLinks($links) {
