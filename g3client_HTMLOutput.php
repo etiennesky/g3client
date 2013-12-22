@@ -30,7 +30,7 @@ class G3Client_HTMLOutput extends G3Client_Output {
         parent::__construct();
     }
 
-	public function generateView($toShow) {
+	public function generateView($toShow, $showItem = '') {
 		$toShow = $this->client->getItem($toShow,'',$this->getOption(G3_SETTINGS_SHOWCHILDREN));
 
 		if(is_array($toShow) && isset($toShow['failure']))
@@ -55,8 +55,6 @@ class G3Client_HTMLOutput extends G3Client_Output {
 				$result .= '</h3>';
 			}
 
-			$result .= $this->generateThumbView($toShow['albums']);
-
 			if($this->getOption(G3_SETTINGS_SHOWPHOTOHEADING) && !empty($toShow['photos'])) {
 				$result .= '<h3 class="g3client_photoscaption">';
 			    $photosHeading = $this->getOption(G3_SETTINGS_PHOTOSHEADING, '');
@@ -70,12 +68,15 @@ class G3Client_HTMLOutput extends G3Client_Output {
 				$result .= '</h3>';
 			}
 
-			$result .= $this->generateThumbView($toShow['photos'], 'group-' . $toShow['curitem']['id']);
+			$result .= $this->generateThumbView($toShow['photos'], 'group-' . $toShow['curitem']['id'], $showItem);
 		} else {
 			$result .= $this->generateSingleView($toShow['curitem']);
 		}
 
-		$result .= '</div>';
+		//TODO move albums after photos and fix stray </p>
+		$result .= $this->generateThumbView($toShow['albums']) . PHP_EOL;
+
+		$result .= '</div>' . PHP_EOL;
 
 		return $result;
 	}
@@ -96,7 +97,7 @@ class G3Client_HTMLOutput extends G3Client_Output {
 		return $result;
 	}
 
-	private function generateThumbView($items, $rel = '') {
+	private function generateThumbView($items, $rel = '', $showItem = '') {
 		if(count($items) == 0) 
 		  return '';
 		$result = '<table class="g3client_thumbview">';
@@ -106,20 +107,20 @@ class G3Client_HTMLOutput extends G3Client_Output {
 		while($i < count($items)) {
 			if($i % $this->getOption(G3_SETTINGS_ITEMS_PER_ROW) == 0) {
 				if(!$isFirstRow) $result .= '</tr>';
-				$result .= '<tr>';
+				$result .= '<tr>' . PHP_EOL;
 				$isFirstRow = false;
 			}
 
-			$result .= $this->getThumbImg($items[$i], $rel);
+			$result .= $this->getThumbImg($items[$i], $rel, $showItem);
 
-			$result .= '</td>';
+			$result .= '</td>' . PHP_EOL;
 
 			$i++;
 		}
 
 		$result .= '</tr>';
 
-		$result .= '</table>';
+		$result .= '</table>' . PHP_EOL;
 
 		return $result;
 	}
@@ -194,7 +195,7 @@ class G3Client_HTMLOutput extends G3Client_Output {
 		return $result;
 	}
 
-	private function getThumbImg($curItem, $rel = '') {
+	private function getThumbImg($curItem, $rel = '', $showItem = '') {
 		$slug = !empty($curItem['slug']) ? $curItem['slug'] : $curItem['title'];
 
 		$result = '<td class="g3client_thumb g3client_thumb_' . $curItem['type'] . '">';
@@ -207,6 +208,9 @@ class G3Client_HTMLOutput extends G3Client_Output {
                 $curItem['img_height'] != $curItem['full_img_height'] &&
                 $curItem['img_width'] != $curItem['full_img_width'] )
                 $result .= ' data-fullimg-href="' .$curItem['full_imgurl']. '"';
+			if($showItem != '' && $showItem==$curItem['id'])
+				$result .= ' data-showitem="1"';
+				$result .= ' data-g3item="' . $curItem['id'] . '"';
 			$result .= '>';
 		} else {
 			$result .= '<a href="' . G3Client_Output::genURL(array('item' => $curItem['id']))  . '" title="' . $slug . '">';

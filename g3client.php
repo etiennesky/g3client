@@ -54,9 +54,15 @@ define('G3_SETTINGS_PHOTOSHEADING', 'g3_photosheading');
 // this not a setting for now, just use the name in shortcode handling
 define('G3_SETTINGS_ITEM_CLASS', 'g3_item_class');
 define('G3_SETTINGS_SINGLESIZE', 'g3_singlesize');
+define('G3_SETTINGS_ADDSOCIALSHARING', 'g3_addsocialsharing');
 
 add_action('init', 'G3Client_Init');
 add_action('widgets_init', 'G3Client_RegisterWidgets');
+
+if(get_option(G3_SETTINGS_ADDSOCIALSHARING) == 'on') {
+	remove_action('wp_head', 'rel_canonical');
+	add_action('wp_head', 'G3Client_addsocialsharing_head', 99999);
+}
 
 if(is_admin()){
 
@@ -76,9 +82,10 @@ if(is_admin()){
     if ( get_user_option('rich_editing') == 'true') {
         add_filter("mce_external_plugins", "G3Client_tinymce_plugin");		
         //Applying the filter if ou're using the rich text editor
-		add_action( 'admin_enqueue_scripts', 'G3Client_print_config' );
+		add_action( 'admin_enqueue_scripts', 'G3Client_print_js_admin_config' );
      }
 }
+add_action( 'wp_enqueue_scripts', 'G3Client_print_js_display_config' );
 
 /** settings incomplete warning */
 function G3Client_AdminSettingsWarning(){
@@ -141,6 +148,7 @@ function G3Client_RegisterSettings() {
     register_setting('g3client-settings', G3_SETTINGS_ALBUMSHEADING);
     register_setting('g3client-settings', G3_SETTINGS_PHOTOSHEADING);
     register_setting('g3client-settings', G3_SETTINGS_SINGLESIZE);
+    register_setting('g3client-settings', G3_SETTINGS_ADDSOCIALSHARING);
 }
 
 /** initializes g3client */
@@ -200,15 +208,42 @@ function G3Client_tinymce_plugin($plugin_array) {
 }
 
 //http://wpengineer.com/2315/wordpress-options-passed-to-javascript-1/
-function G3Client_print_config() {
+function G3Client_print_js_admin_config() {
 	
-	$config = array( 'restapiurl' => get_option(G3_SETTINGS_APIURL), 
-					 'restapikey' => get_option(G3_SETTINGS_APIKEY) );
-?>
-	<script type="text/javascript">
-		var G3Client_config = <?php echo json_encode( $config ); ?>;
-	</script>
-	<?php
+	$config = array( G3_SETTINGS_APIURL => get_option(G3_SETTINGS_APIURL), 
+					 G3_SETTINGS_APIKEY => get_option(G3_SETTINGS_APIKEY) );
+?><script type="text/javascript"> var g3client_admin_config = <?php echo json_encode( $config ); ?>; </script>
+<?php
+}
+
+function G3Client_print_js_display_config() {
+	$config = array( G3_SETTINGS_ADDSOCIALSHARING => get_option(G3_SETTINGS_ADDSOCIALSHARING) );
+?><script type="text/javascript"> var g3client_display_config = <?php echo json_encode( $config ); ?>; </script>
+<?php
+}
+
+function G3Client_addsocialsharing_head() {
+	global $_GET, $_SERVER;
+	$html = '';
+	$url = $_SERVER["SCRIPT_URI"];
+	if($_SERVER["QUERY_STRING"]!="") $url .= "?" . $_SERVER["QUERY_STRING"];
+
+	// TODO add title, description to override defaults
+	// TODO remove digg digg fb script (with option)
+	$html .= '<!-- begin g3client -->' . PHP_EOL;
+	$html .= '<meta property="og:url" content="' . $url . '" />' . PHP_EOL;
+	$html .= '<link rel="canonical" href="'.$url.'" />' . PHP_EOL;
+	if(isset($_GET['showitem']) && is_numeric($_GET['showitem'])) {
+		$client = new G3Client(get_option(G3_SETTINGS_APIURL),
+							   get_option(G3_SETTINGS_APIKEY));
+		$showItem = $client->getItem($_GET['showitem']);
+		if($showItem) {
+			$html .= '<meta property="og:image" content="' . $showItem['curitem']['imgurl'] . '" />' . PHP_EOL;
+		}
+	}
+	$html .= '<!-- end g3client -->' . PHP_EOL;
+
+	echo $html;
 }
 
 ?>

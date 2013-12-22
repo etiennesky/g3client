@@ -123,6 +123,13 @@ function G3Client_AdminPage() {
 			 <span class="description">Note that full size is not recommended, it is better to use thumb or resize(default).</span>
 		</td>
 	</tr>
+	<tr valign="top">
+		<th scope="row"><?php _e('Add social sharing buttons', 'g3client') ?></th>
+		<td>
+			<label><input type="checkbox" name="<?php echo G3_SETTINGS_ADDSOCIALSHARING ?>" <?php checked('on', get_option(G3_SETTINGS_ADDSOCIALSHARING)) ?>/> <?php _e('Add social sharing buttons and comments to lightbox script and modify headers.', 'g3client') ?></label><br>
+				  <span class="description">This will add a sidebar to the fancybox script and modify og:url , og:image and link rel="canonical" headers, so make sure no other plugins (e.g. FB Open Graph Tags) are doing the same.</span>
+		</td>
+	</tr>
 </table>
 
 <h3><?php _e('Output', 'g3client') ?></h3>
@@ -191,6 +198,10 @@ function G3Client_AdminPage() {
 		</td>
 	</tr>
 </table>
+
+<p class="submit">
+<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+</p>
 
 <h3><?php _e('How to use G3Client', 'g3client'); ?></h3>
 <ol>
@@ -267,9 +278,6 @@ function G3Client_AdminPage() {
     </tbody>
 </table>
 
-<p class="submit">
-<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-</p>
 </form>
 </div>
 <?php

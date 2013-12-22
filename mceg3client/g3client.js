@@ -25,8 +25,8 @@ if (!Array.prototype.remove)
 			t.url = url;
 			t.editor = ed;
 			t._createButtons();
-			t.g3config = G3Client_config;
-
+			t.g3config = g3client_admin_config;
+			console.log(t.g3config);
 			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('...');
 			ed.addCommand('G3Client', function() {
                 return;
@@ -142,12 +142,12 @@ if (!Array.prototype.remove)
 
 					// this should probably go into another function for easier code reading
 					//jQuery.getJSON(ajaxurl, {what: 'meta', node: item, action: 'gallery3proxy'}, function(data) {
-					var url = t.g3config['restapiurl'] + 'item/' + item; // TODO remove quotes?
+					var url = t.g3config['g3_restapiurl'] + 'item/' + item; // TODO remove quotes?
 					jQuery.ajax({ 
 						dataType: "json", data: {}, type: "GET", url: url,
 						//success: successFunc, error: errorFunc,				
 						beforeSend: function(xhr){
-							xhr.setRequestHeader('X-Gallery-Request-Key',t.g3config['restapikey']); },
+							xhr.setRequestHeader('X-Gallery-Request-Key',t.g3config['g3_restapikey']); },
 						success : function(data) {
 							if( data.entity!=undefined && data.entity.thumb_url_public != undefined )
 							{

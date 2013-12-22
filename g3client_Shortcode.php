@@ -68,6 +68,11 @@ function G3Client_Shortcode_Handler($atts) {
 	if(isset($_GET['item']) && is_numeric($_GET['item']))
 		$item = $_GET['item'];
 
+	if(isset($_GET['showitem']) && is_numeric($_GET['showitem']))
+		$showItem = $_GET['showitem'];
+	else
+		$showItem = '';
+
 	$outputFormatter = false;
 
 	$sluginsingleview = G3Client_ParseBoolean($sluginsingleview);
@@ -114,7 +119,7 @@ function G3Client_Shortcode_Handler($atts) {
             G3_SETTINGS_ITEM_CLASS => $class
         ));
 
-        return $outputFormatter->generateView($item);
+        return $outputFormatter->generateView($item, $showItem);
     }
 }
 
