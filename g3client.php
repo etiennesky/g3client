@@ -100,14 +100,23 @@ function G3Client_AdminSettingsWarning(){
 
 /** admin menu hooks */
 function G3Client_AdminMenuHook() {
-	$page1 = add_submenu_page('options-general.php', __('G3Client Settings', 'g3client'),
-							  __('Gallery3 client', 'g3client'), 'manage_options', 'g3client',
-							  'G3Client_AdminPage');
+	add_submenu_page('options-general.php', __('G3Client Settings', 'g3client'),
+					 __('Gallery3 client', 'g3client'), 'manage_options', 'g3client',
+					 'G3Client_AdminPage');
+
     //gallery3Picker::add_gallery3_picker_menu();
 	//add_options_page( __( 'Gallery3 settings' ), __( 'G3client media picker' ), 8, basename(__FILE__), array('gallery3Picker', 'gallery3_picker_options_page'));
-    $page2 = add_submenu_page('', __( 'Gallery3 settings' ), 
-							  __( 'G3client media picker' ), 8, 'picker.php', //'gallery3-picker', 
-							  array('gallery3Picker', 'gallery3_picker_options_page'));
+    add_submenu_page('', __( 'Gallery3 settings' ), 
+					 __( 'G3client media picker' ), 8, 'picker.php', //'gallery3-picker', 
+					 array('gallery3Picker', 'gallery3_picker_options_page'));
+
+	//hack to add links to Gallery3 in Media and Settings menus
+    global $submenu;
+	$url = get_option(G3_SETTINGS_APIURL);
+	$url = str_replace('index.php/rest/', '', $url);
+    $submenu['upload.php'][] = array('Gallery3', 'manage_options', $url);
+    $submenu['options-general.php'][] = array('Gallery3', 'manage_options', $url);
+	//echo "<pre>";print_r($submenu);	echo "</pre>";
 }
 
 /** adds plugin action links */

@@ -305,7 +305,13 @@ function G3Client_Validate() {
 		echo '</p></div>';
 	}
 	else {
-		echo "<br>==> <a href='./options-general.php?page=picker.php'>Configure Gallery3 media picker</a> <==<br><br>";
+		echo "<br>";
+		$url = get_option(G3_SETTINGS_APIURL);
+		$url = str_replace('index.php/rest/', '', $url);
+		echo "<a href='" . $url . "'>Add photos to your Gallery3</a>";
+		echo "&nbsp;&nbsp;";
+		echo "<a href='./options-general.php?page=picker.php'>Configure Gallery3 media picker</a>";
+		echo "<br><br>";
 	}
 }
 ?>
