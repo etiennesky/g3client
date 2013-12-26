@@ -18,8 +18,10 @@ var writeQueryArray = function( queries ) {
 }
 
 jQuery(document).ready(function($) {
-
-	var show_sidebar = g3client_display_config['g3_addsocialsharing'] == 'on';
+	var windowWidth = window.screen.width < window.outerWidth ?
+        window.screen.width : window.outerWidth;
+	var isMobile = windowWidth <= 600;
+	var showSidebar = g3client_display_config['g3_addsocialsharing'] == 'on' && !isMobile;
 
 	$('a.g3client_image').fancybox({
 		'hideOnContentClick': true,
@@ -27,18 +29,17 @@ jQuery(document).ready(function($) {
 		'transitionOut': 'fade',
 	    padding: 5,
 		scrolling:'no',
-	    fullscreenMargin: show_sidebar ? [ 10, 400, 40, 20] : [ 10, 10, 40, 20],
-		leftRatio: show_sidebar ? 0.75 : 0.5,
+		margin: isMobile ? 0 : 20,
+	    fullscreenMargin: showSidebar ? [ 10, 400, 40, 20] : [ 10, 10, 40, 20],
+		leftRatio: showSidebar ? 0.75 : 0.5,
 		
 	    helpers: {
-			//title: { type : 'inside' },
-			//title: null,
+			title: isMobile ? null : { type : 'float' },
 			//overlay: { css: { 'background' : 'rgba(255,255,255,0.95)' } },
 			overlay: { css: { 'background' : 'rgba(200,200,200,0.95)' } },
-			//buttons: { position: 'top' },
-			buttons: { position: 'top'},
-			thumbs: { width: 100, height: 100 },
-			sidebar : (!show_sidebar) ? null : {
+			buttons: isMobile ? null : { position: 'top'},
+			thumbs: isMobile ? null : { width: 100, height: 100 },
+			sidebar : (!showSidebar) ? null : {
                 // Wrapper element
                 type: 'overlay', // 'inside', 'outside', 'outer', 'over', 'overlay'
                 position: 'top', // 'bottom'
@@ -114,24 +115,24 @@ jQuery(document).ready(function($) {
 		},
 
         beforeShow: function(opts, obj) {
-			if(show_sidebar)
+			if(showSidebar)
 				this.setSidebarContents();
 		},
 
 		afterShow: function() {
-			if(show_sidebar) {
+			if(showSidebar) {
 				var sidebar = this.sidebar;
 				FB.XFBML.parse(sidebar.sidebar_content[0], function() { sidebar.showSidebar(); });
 			}
 		},
 
 		beforeChange: function () {
-			if(show_sidebar)
+			if(showSidebar)
 				this.sidebar.hideSidebar();
 		},
 
 		afterChange: function () {
-			if(show_sidebar)
+			if(showSidebar)
 				this.setSidebarContents();
 		},
 
