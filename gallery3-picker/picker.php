@@ -530,13 +530,19 @@ EOT;
 		// Setup Default Options Array
 		$optionarray_def = array(
 			'gallery3_config_url' => get_option('home') . '/gallery3',
-			'gallery3_name' => 'Gallery',
+			'gallery3_name' => 'Gallery3',
 			'gallery3_api_key' => '',
 			'gallery3_g3client' => 'on',
 			'gallery3_default_size' => 'resize',
 			'gallery3_maxlength' => 4000
 		);
-		
+		// import settings from g3client
+		if ( function_exists('G3Client_RegisterSettings')) {
+			$url = get_option(G3_SETTINGS_APIURL);
+			$url = preg_replace('/\/index.php\/rest\/$/', '', $url);
+			$optionarray_def['gallery3_config_url'] = $url;
+			$optionarray_def['gallery3_api_key'] = get_option(G3_SETTINGS_APIKEY);
+		}
 		if (isset($_POST['submit']) ) {		 
 			// Options Array Update
 			$opts = get_option('gallery3_picker_options');
@@ -551,7 +557,6 @@ EOT;
 			update_option('gallery3_picker_options', $opts);
 			
 			gallery3Picker::gallery3_connection_test();
-
 		}
 
 		$opts = get_option('gallery3_picker_options');
