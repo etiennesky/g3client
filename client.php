@@ -34,7 +34,7 @@ class G3Client {
     /** request cache */
 	private $requestCache = array();
     /** whether to use the pear http request component */
-	private $useHTTPReq2 = false;
+	private $httpMethod = 'curl';
 
     /**
      * Creates a new instance of {@code G3Client}
@@ -46,9 +46,11 @@ class G3Client {
 		$this->setURL($baseURL);
 		$this->apiKey = $apiKey;
 
-		$this->useHTTPReq2 = (class_exists('HTTP_Request2') && !method_exists('curl_init'));
-
-		if($this->useHTTPReq2) require_once('HTTP/Request2.php');
+		if(class_exists('HTTP_Request2') && !method_exists('curl_init'))
+			$this->httpMethod = 'HTTPReq2';
+		else if(function_exists('wp_remote_get'))
+			$this->httpMethod = 'HTTP_WP_API';
+		if($this->httpMethod == 'HTTPReq2') require_once('HTTP/Request2.php');
 	}
 
 
@@ -73,13 +75,14 @@ class G3Client {
 	return $ret;
         }
  
-	if($useCache && isset($this->requestCache[$req])) return $this->requestCache[$req];
+ 	if($useCache && isset($this->requestCache[$req])) return $this->requestCache[$req];
 
-	//echo $req."<br>";
+	//$res = ($this->httpMethod == 'HTTPReq2') ? $this->requestHTTP2($req,$useCache) : $this->requestCURL($req,$useCache);
+	if ($this->httpMethod == 'HTTPReq2') $res = $this->requestHTTP2($req,$useCache);
+	else if ($this->httpMethod == 'HTTP_WP_API') $res = $this->requestHTTP_WP_API($req,$useCache);
+	else $res = $this->requestCURL($req,$useCache);
 
-	$res = ($this->useHTTPReq2) ? $this->requestHTTP2($req,$useCache) : $this->requestCURL($req,$useCache);
-
-		return $res;
+	return $res;
 	}
 
 	private function requestCURL($resource,$useCache=true) {
@@ -112,6 +115,38 @@ class G3Client {
 				'failure' => true,
 				'http_status' => $response['http_code'],
 				'msg' => $http_codes[$response['http_code']]
+			);
+		}
+
+		return $result;
+	}
+
+	private function requestHTTP_WP_API($resource,$useCache=true) {
+		$args = array(
+					  'method'      => 'GET',
+					  'redirection' => 16,
+					  'user-agent'  => G3Client::$USER_AGENT,
+					  'headers'     => array(
+											 'X-Gallery-Request-Method: get',
+											 'X-Gallery-Request-Key: ' . urlencode($this->apiKey)),
+					  'cookies'     => array(tempnam(sys_get_temp_dir(), 'g3client.cookies')),
+					  'sslverify'   => false
+					  );		
+
+ 		$result = false;
+		$response = wp_remote_get( $resource, $args  );
+		$code = $response['response']['code'];
+		
+ 		if( $code == 200) {
+		 	$result = json_decode($response['body']);
+			if($useCache) $this->requestCache[$resource] = $result;
+		} else {
+			$http_codes = parse_ini_file(dirname(__FILE__) . '/http_codes.ini');
+
+			$result = array(
+				'failure' => true,
+				'http_status' => $code,
+				'msg' => $http_codes[$code]
 			);
 		}
 
