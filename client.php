@@ -34,7 +34,7 @@ class G3Client {
     /** request cache */
 	private $requestCache = array();
     /** whether to use the pear http request component */
-	private $httpMethod = 'curl';
+	private $httpMethod = '';
 
     /**
      * Creates a new instance of {@code G3Client}
@@ -43,21 +43,18 @@ class G3Client {
      * @param apiKey the api key
      */
 	public function __construct($baseURL, $apiKey) {
-		$this->setURL($baseURL);
+		$this->baseURL = $baseURL;
 		$this->apiKey = $apiKey;
 
-		if(class_exists('HTTP_Request2') && !method_exists('curl_init'))
-			$this->httpMethod = 'HTTPReq2';
-		else if(function_exists('wp_remote_get'))
+		if(function_exists('wp_remote_get'))
 			$this->httpMethod = 'HTTP_WP_API';
+		else if(class_exists('HTTP_Request2') && !method_exists('curl_init'))
+			$this->httpMethod = 'HTTPReq2';
+		else
+			$this->httpMethod = 'curl';
+
 		if($this->httpMethod == 'HTTPReq2') require_once('HTTP/Request2.php');
 	}
-
-
-	private function setURL($url) {
-		$this->baseURL = $url;
-	}
-
 
 	private function request($resource, $isURL = false, $useCache = true) {
         if(is_array($resource)) {
